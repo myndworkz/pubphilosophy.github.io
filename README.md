@@ -1,2 +1,2 @@
 # pubphilosophy.github.io
- Pb Philosophy website
+ Pub Philosophy website
