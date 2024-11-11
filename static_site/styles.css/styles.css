@@ -15,3 +15,18 @@ main {
     max-width: 800px;
     margin: auto;
 }
+/* styles.css */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    margin: 0.5em 0;
+}
+li a {
+    text-decoration: none;
+    color: #007acc;
+}
+li a:hover {
+    text-decoration: underline;
+}
