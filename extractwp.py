@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 
 # Path to your XML file and output folder
-xml_file = 'myndworkz.wordpress.2024-10-16.000.xml'
+xml_file = 'pubphilosophy.wordpress.2024-11-08.000.xml'
 output_folder = 'static_site'
 
 # Ensure output directory exists
@@ -50,10 +50,24 @@ namespaces = {
 
 # Process each item in the XML file (each post/page is an 'item')
 for item in root.findall('channel/item'):
+    import re
+
+# Define a function to sanitize filenames
+def sanitize_filename(filename):
+    # Replace special characters with underscores or remove them
+    filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    # Limit filename length to avoid excessively long names
+    return filename[:100]
+
+# Process each item in the XML file (each post/page is an 'item')
+for item in root.findall('channel/item'):
     title = item.find('title').text or "Untitled"
     content = item.find('content:encoded', namespaces).text or ""
     post_name = item.find('wp:post_name', namespaces).text or title.lower().replace(" ", "_")
     
+    # Sanitize the post_name for use as a filename
+    filename = sanitize_filename(post_name) + ".html"
+
     # Clean and format content with BeautifulSoup
     soup = BeautifulSoup(content, 'html.parser')
     formatted_content = soup.prettify()
@@ -62,7 +76,6 @@ for item in root.findall('channel/item'):
     html_content = html_template.format(title=title, content=formatted_content)
 
     # Save each post as an HTML file
-    filename = f"{post_name}.html"
     with open(os.path.join(output_folder, filename), "w", encoding="utf-8") as file:
         file.write(html_content)
     
@@ -70,6 +83,7 @@ for item in root.findall('channel/item'):
     index_entries.append((title, filename))
 
     print(f"Generated {filename}")
+
 
 # Create the index.html content
 index_html = """
