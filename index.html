@@ -1,54 +1,125 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index of Posts</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Pub Philosophy - Slicing and dicing the world at its joints. Join us in London and Geneva for lively philosophical discussions.">
+    <title>Pub Philosophy</title>
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p, ul {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+        a:hover {
+            color: #d62828;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background: #f4f4f4;
+            padding: 1em 0;
+            text-align: center;
+            border-bottom: 2px solid #d62828;
+        }
+        header h1 {
+            color: #d62828;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 1em 0;
+        }
+        nav ul li {
+            margin: 0 1em;
+        }
+        nav ul li a {
+            font-weight: bold;
+        }
+        section {
+            padding: 2em 0;
+            border-bottom: 1px solid #ddd;
+        }
+        footer {
+            text-align: center;
+            background: #f4f4f4;
+            padding: 1em 0;
+            border-top: 2px solid #d62828;
+        }
+        .button {
+            display: inline-block;
+            background: #d62828;
+            color: #fff;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background: #b22222;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Index of Posts</h1>
+        <h1>Pub Philosophy</h1>
+        <p><em>Slicing and dicing the world at its joints</em></p>
     </header>
-    <main>
-        <ul>
-            <li><a href="home-2.html">Home</a></li>
-            <li><a href="7.html">Untitled</a></li>
-            <li><a href="img_20200724_2029262.html">IMG_20200724_202926~2</a></li>
-            <li><a href="cropped-img_20200724_2029262.html">cropped-img_20200724_2029262</a></li>
-            <li><a href="wp-global-styles-pub%2fbantry.html">Custom Styles</a></li>
-            <li><a href="img_20200724_2029262-2.html">IMG_20200724_202926~2</a></li>
-            <li><a href="cropped-img_20200724_2029262-1-jpg.html">cropped-img_20200724_2029262-1.jpg</a></li>
-            <li><a href="_a_href=_https___widgets.designmynight.com_tonic_ticket-widget.min.js_item-ids=61c04e8465b1cf588f6fe.html"><a href="https://widgets.designmynight.com/tonic/ticket-widget.min.js?item-ids=61c04e8465b1cf588f6feda6">https://widgets.designmynight.com/tonic/ticket-widget.min.js?item-ids=61c04e8465b1cf588f6feda6</a></a></li>
-            <li><a href="booking.html">Booking</a></li>
-            <li><a href="untitled.html">Untitled</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="92.html">Untitled</a></li>
-            <li><a href="logo.html">logo</a></li>
-            <li><a href="logotwo.html">logotwo</a></li>
-            <li><a href="logotwo-2.html">logotwo</a></li>
-            <li><a href="logotwotwo.html">logotwotwo</a></li>
-            <li><a href="wp-global-styles-pub%2fblank-canvas-blocks.html">Custom Styles</a></li>
-            <li><a href="144.html">Untitled</a></li>
-            <li><a href="navigation.html">Navigation</a></li>
-            <li><a href="suggest_the_next_philosophy_cabin_question.html">Suggest The Next Philosophy Cabin Question</a></li>
-            <li><a href="questions.html">Questions</a></li>
-            <li><a href="menu.html">Menu</a></li>
-            <li><a href="pxl_20220306_200810332.html">pxl_20220306_200810332</a></li>
-            <li><a href="pxl_20220306_200752983.html">pxl_20220306_200752983</a></li>
-            <li><a href="pxl_20220219_135244513.html">pxl_20220219_135244513</a></li>
-            <li><a href="image.html">image</a></li>
-            <li><a href="image-1.html">image-1</a></li>
-            <li><a href="image-2.html">image</a></li>
-            <li><a href="review-update.html">review-update</a></li>
-            <li><a href="geneva.html">English Philosophy Cafe in Geneva</a></li>
-            <li><a href="image-3.html">image</a></li>
 
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
-    </main>
+    </nav>
+
+    <div class="container">
+        <section id="home">
+            <h2>Welcome to Pub Philosophy</h2>
+            <p>Where ideas flow freely. Join us for lively discussions about life’s big questions in London and Geneva.</p>
+            <a href="#events" class="button">See Upcoming Events</a>
+        </section>
+
+        <section id="about">
+            <h2>About Us</h2>
+            <p>Pub Philosophy is an inclusive space for discussion, debate, and connection. Whether in London or Geneva, we encourage open dialogue about life’s biggest ideas.</p>
+        </section>
+
+        <section id="events">
+            <h2>Events</h2>
+            <p><strong>London:</strong> Hoxton Cabin, every Thursday, 6:15-7:45 PM</p>
+            <p><strong>Geneva:</strong> Café Rousseau, alternating Saturdays, 11:15-12:45 PM</p>
+            <p><a href="#contact" class="button">Join the Conversation</a></p>
+        </section>
+
+        <section id="blog">
+            <h2>Blog</h2>
+            <p>Catch up on past discussions and highlights from our events. New posts coming soon!</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Questions? Suggestions? Get in touch!</p>
+            <p>Email: <a href="mailto:info@pubphilosophy.io">info@pubphilosophy.io</a></p>
+        </section>
+    </div>
+
     <footer>
-        <p>Generated index of posts</p>
+        <p>© 2024 Pub Philosophy | Powered by Myndworkz Ltd</p>
     </footer>
 </body>
 </html>
