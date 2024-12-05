@@ -29,13 +29,25 @@
             margin: 0 auto;
         }
         header {
-            background: #f4f4f4;
-            padding: 1em 0;
+            background: linear-gradient(to right, #ffffff, #f4f4f4);
+            padding: 2em 0;
             text-align: center;
             border-bottom: 2px solid #d62828;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         header h1 {
             color: #d62828;
+            animation: fadeIn 2s ease-in-out;
         }
         nav ul {
             display: flex;
@@ -53,9 +65,16 @@
             padding: 2em 0;
             border-bottom: 1px solid #ddd;
         }
+        section:nth-child(odd) {
+            background: linear-gradient(to right, #ffffff, #f8f9fa);
+        }
+        section:nth-child(even) {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+        }
         footer {
             text-align: center;
-            background: #f4f4f4;
+            background: linear-gradient(to top, #333, #111);
+            color: #fff;
             padding: 1em 0;
             border-top: 2px solid #d62828;
         }
@@ -65,11 +84,17 @@
             color: #fff;
             padding: 0.5em 1em;
             border-radius: 5px;
+            transition: background 0.3s ease;
         }
         .button:hover {
             background: #b22222;
         }
+        .icon {
+            font-size: 1.2em;
+            margin-right: 0.5em;
+        }
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -96,24 +121,24 @@
 
         <section id="about">
             <h2>About Us</h2>
-            <p>Pub Philosophy is an inclusive space for discussion, debate, and connection. Whether in London or Geneva, we encourage open dialogue about life’s biggest ideas.</p>
+            <p><i class="fas fa-users icon"></i>Pub Philosophy is an inclusive space for discussion, debate, and connection. Whether in London or Geneva, we encourage open dialogue about life’s biggest ideas.</p>
         </section>
 
         <section id="events">
             <h2>Events</h2>
-            <p><strong>London:</strong> Hoxton Cabin, every Thursday, 6:15-7:45 PM</p>
-            <p><strong>Geneva:</strong> Café Rousseau, alternating Saturdays, 11:15-12:45 PM</p>
+            <p><i class="fas fa-calendar-alt icon"></i><strong>London:</strong> Hoxton Cabin, every Thursday, 6:15-7:45 PM</p>
+            <p><i class="fas fa-calendar-alt icon"></i><strong>Geneva:</strong> Café Rousseau, alternating Saturdays, 11:15-12:45 PM</p>
             <p><a href="#contact" class="button">Join the Conversation</a></p>
         </section>
 
         <section id="blog">
             <h2>Blog</h2>
-            <p>Catch up on past discussions and highlights from our events. New posts coming soon!</p>
+            <p><i class="fas fa-pen-nib icon"></i>Catch up on past discussions and highlights from our events. New posts coming soon!</p>
         </section>
 
         <section id="contact">
             <h2>Contact Us</h2>
-            <p>Questions? Suggestions? Get in touch!</p>
+            <p><i class="fas fa-envelope icon"></i>Questions? Suggestions? Get in touch!</p>
             <p>Email: <a href="mailto:info@pubphilosophy.io">info@pubphilosophy.io</a></p>
         </section>
     </div>
