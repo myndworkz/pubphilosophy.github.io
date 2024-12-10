@@ -1,4 +1,117 @@
 /* General Reset */
+/* General Reset */
+body, h1, h2, h3, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Responsive Navigation Bar */
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    list-style: none;
+    padding: 1em;
+    background-color: #333;
+}
+
+nav ul li {
+    margin: 0.5em 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background: #555;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    background: #777;
+}
+
+/* Responsive Splash Section */
+.splash {
+    text-align: center;
+    padding: 2em;
+    background: #f4f4f4;
+}
+
+.splash .btn {
+    display: inline-block;
+    margin: 0.5em;
+    padding: 0.75em 1.5em;
+    background: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.splash .btn:hover {
+    background: #555;
+}
+
+/* Responsive Content Section */
+.about-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    background: #fff;
+}
+
+.about-section .text-box, 
+.about-section .image-box {
+    flex: 1 1 45%; /* Flex item takes up 45% width by default */
+    text-align: center;
+}
+
+.about-section .text-box {
+    padding: 1em;
+}
+
+.about-section .image-box img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Responsive Footer */
+footer {
+    text-align: center;
+    padding: 1em;
+    background: #333;
+    color: white;
+}
+
+/* Media Queries for Smaller Screens */
+@media (max-width: 768px) {
+    .splash .btn {
+        padding: 0.5em 1em;
+        font-size: 0.9em;
+    }
+
+    .about-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-section .text-box, 
+    .about-section .image-box {
+        flex: 1 1 100%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
