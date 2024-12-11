@@ -1,17 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/YOUR-KIT-ID.js" crossorigin="anonymous"></script>
+	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Café Philosophy at MRL - Engage in thoughtful discussions in Geneva.">
     <title>Café Philosophy at MRL</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background: linear-gradient(to right, #ffffff, #f4f4f4);
+            padding: 2em 0;
+            border-bottom: 2px solid #d62828;
+            animation: fadeIn 2s ease-in-out;
+        }
+        header h1 {
+            font-family: "Georgia", serif;
+            color: #d62828;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .container {
+            margin: 2em auto;
+            width: 90%;
+            max-width: 800px;
+        }
+        .btn {
+            background: #d62828;
+            color: #fff;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 1em;
+        }
+        .btn:hover {
+            background: #b22222;
+        }
         .event img {
-            width: 16%; /* Reduce image size to one-sixth */
+            width: 16%;
             height: auto;
             margin: 1em auto;
             display: block;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            padding: 1em 0;
+        }
+        nav ul li {
+            margin: 0 1em;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1em 0;
+            margin-top: 2em;
         }
     </style>
 </head>
