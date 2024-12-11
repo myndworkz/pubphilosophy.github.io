@@ -3,109 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pub Philosophy - Slicing and dicing the world at its joints. Join us in London and Geneva for lively philosophical discussions.">
     <title>Pub Philosophy</title>
-    <style>
-        /* Basic Reset */
-        body, h1, h2, h3, p, ul {
-            margin: 0;
-            padding: 0;
-        }
-        .event img {
-			width: 16%; /* Makes the buttons smaller */
-			height: auto; /* Maintains aspect ratio */
-			margin: 1em auto;
-			display: block;
-		}
-		body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        a {
-            text-decoration: none;
-            color: #333;
-        }
-        a:hover {
-            color: #d62828;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        header {
-            background: linear-gradient(to right, #ffffff, #f4f4f4);
-            padding: 2em 0;
-            text-align: center;
-            border-bottom: 2px solid #d62828;
-            animation: fadeIn 2s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        header h1 {
-            color: #d62828;
-            animation: fadeIn 2s ease-in-out;
-        }
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            margin: 1em 0;
-        }
-        nav ul li {
-            margin: 0 1em;
-        }
-        nav ul li a {
-            font-weight: bold;
-        }
-        section {
-            padding: 2em 0;
-            border-bottom: 1px solid #ddd;
-        }
-        section:nth-child(odd) {
-            background: linear-gradient(to right, #ffffff, #f8f9fa);
-        }
-        section:nth-child(even) {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-        }
-        footer {
-            text-align: center;
-            background: linear-gradient(to top, #333, #111);
-            color: #fff;
-            padding: 1em 0;
-            border-top: 2px solid #d62828;
-        }
-        .carousel {
-            display: flex;
-            justify-content: center;
-            gap: 1em;
-            padding: 2em 0;
-        }
-        .carousel-button {
-            display: inline-block;
-            width: 100px;
-            height: 100px;
-            background-size: cover;
-            background-position: center;
-            border: 2px solid #d62828;
-            border-radius: 50%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .carousel-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-    </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -115,66 +14,34 @@
 
     <nav>
         <ul>
-            <li><a href="home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#events">Events</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cafe-philosophy.html">Café Philosophy</a></li>
+            <li><a href="flanagans-pub.html">Pub Philosophy</a></li>
+            <li><a href="hoxton-cabin.html">Hoxton Cabin</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <section id="home">
-            <h2>Welcome to Pub Philosophy</h2>
-            <p>Where ideas flow freely. Join us for lively discussions about life’s big questions in London and Geneva.</p>
-            <a href="#events" class="button">See Upcoming Events</a>
-        </section>
-
-        <section id="about">
-            <h2>About Us</h2>
-            <p><i class="fas fa-users icon"></i>Pub Philosophy is an inclusive space for discussion, debate, and connection. Whether in London or Geneva, we encourage open dialogue about life’s biggest ideas.</p>
-        </section>
-
-    <section id="upcoming-events">
+        <h2>Welcome to Pub Philosophy</h2>
+        <p>Explore life’s toughest and strangest questions in a relaxed, open-discussion format.</p>
+        <p>Choose an event to get started:</p>
+        <div class="carousel">
     <h2>Upcoming Events</h2>
-    <div class="carousel">
-        <div class="event">
-            <a href="hoxton-cabin.html">
-                <img src="images/BtnShield.webp" alt="London Shield Button">
-            </a>
-            <p>Hoxton Cabin</p>
-        </div>
-        <div class="event">
-            <a href="cafe-philosophy.html">
-                <img src="images/SwissBtn.webp" alt="Swiss Button">
-            </a>
-            <p>Café Philosophy</p>
-        </div>
-        <div class="event">
-            <a href="flanagans-pub.html">
-                <img src="images/SwissBtn.webp" alt="Swiss Button">
-            </a>
-            <p>Flanagan’s Pub</p>
-        </div>
+    <div class="carousel-buttons">
+        <a href="cafe-philosophy.html" class="btn">
+            <img src="SwissBtn.webp" alt="Café Philosophy Button">
+            <span>Café Philosophy</span>
+        </a>
+        <a href="flanagans-pub.html" class="btn">
+            <img src="SwissBtn.webp" alt="Flanagan’s Pub Button">
+            <span>Pub Philosophy at Flanagan's</span>
+        </a>
+        <a href="hoxton-cabin.html" class="btn">
+            <img src="BtnShield.webp" alt="Hoxton Cabin Button">
+            <span>Pub Philosophy at Hoxton Cabin</span>
+        </a>
     </div>
-</section>
-
-<!-- Blog Section (Commented Out) -->
-<!-- 
-<section id="blog">
-    <h2>From the Blog</h2>
-    <p>Stay tuned for insightful posts and updates on philosophy and events.</p>
-</section>
--->
-
-
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <p><i class="fas fa-envelope icon"></i>Questions? Suggestions? Get in touch!</p>
-            <p>Email: <a href="mailto:info@pubphilosophy.io">info@pubphilosophy.io</a></p>
-        </section>
     </div>
-
     <footer>
         <p>© 2024 Pub Philosophy | Powered by Myndworkz Ltd</p>
     </footer>
