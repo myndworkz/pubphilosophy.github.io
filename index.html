@@ -78,20 +78,25 @@
             padding: 1em 0;
             border-top: 2px solid #d62828;
         }
-        .button {
+        .carousel {
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            padding: 2em 0;
+        }
+        .carousel-button {
             display: inline-block;
-            background: #d62828;
-            color: #fff;
-            padding: 0.5em 1em;
-            border-radius: 5px;
-            transition: background 0.3s ease;
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #d62828;
+            border-radius: 50%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .button:hover {
-            background: #b22222;
-        }
-        .icon {
-            font-size: 1.2em;
-            margin-right: 0.5em;
+        .carousel-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -104,7 +109,7 @@
 
     <nav>
         <ul>
-            <li><a href="#home">Home</a></li>
+            <li><a href="home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#events">Events</a></li>
             <li><a href="#blog">Blog</a></li>
@@ -128,39 +133,22 @@
             <h2>Events</h2>
             <p><i class="fas fa-calendar-alt icon"></i><strong>London:</strong> Hoxton Cabin, every Thursday, 6:15-7:45 PM</p>
             <p><i class="fas fa-calendar-alt icon"></i><strong>Geneva:</strong> Café Rousseau, alternating Saturdays, 11:15-12:45 PM</p>
-			<p><i class="fas fa-calendar-alt icon"></i><strong>Geneva:</strong> Flanagan's, alternating Wednesdays, 19:00-20:30 PM</p>
+            <p><i class="fas fa-calendar-alt icon"></i><strong>Geneva:</strong> Flanagan's, alternating Wednesdays, 19:00-20:30 PM</p>
             <p><a href="#contact" class="button">Join the Conversation</a></p>
+        </section>
+
+        <section id="carousel">
+            <h2>Explore More</h2>
+            <div class="carousel">
+                <a href="#BtnShield" class="carousel-button" style="background-image: url('images/BtnShield.webp');"></a>
+                <a href="#SwissBtn" class="carousel-button" style="background-image: url('images/SwissBtn.webp');"></a>
+            </div>
         </section>
 
         <section id="blog">
             <h2>Blog</h2>
             <p><i class="fas fa-pen-nib icon"></i>Catch up on past discussions and highlights from our events. New posts coming soon!</p>
         </section>
-<div class="container">
-    <section id="home">
-        <!-- Home content here -->
-    </section>
-
-    <section id="about">
-        <!-- About content here -->
-    </section>
-
-    <section id="events">
-        <!-- Events content here -->
-    </section>
-
-    <section id="carousel">
-        <!-- Carousel content here -->
-    </section>
-
-    <section id="blog">
-        <!-- Blog content here -->
-    </section>
-
-    <section id="contact">
-        <!-- Contact content here -->
-    </section>
-</div>
 
         <section id="contact">
             <h2>Contact Us</h2>
