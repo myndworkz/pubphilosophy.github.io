@@ -1,117 +1,180 @@
-/* General Body Styles */
-body {
-    font-family: Arial, sans-serif;
+/* General Reset */
+* {
     margin: 0;
     padding: 0;
-    text-align: center;
-    background-color: #f9f9f9;
-    color: #333;
+    box-sizing: border-box;
+}
+/* Event Images */
+
+/* Container */
+/* Container */
+.container {
+    margin: 2em auto;
+    width: 90%;
+    max-width: 800px; /* Prevent excessive container width */
 }
 
-/* Header Styles */
+/* Image */
+.event img {
+    width: 360px;
+    height: 240px; /* Adjust based on desired aspect ratio */
+    display: block;
+    margin: 1em auto;
+    object-fit: cover; /* Ensures content fits within dimensions */
+}
+
+
+/* Global Reset for Images */
+img {
+    max-width: none !important;
+    height: auto !important;
+    display: block !important;
+}
+
+/* Body Style */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header Styling */
 header {
+    background: linear-gradient(to right, #ffffff, #f4f4f4);
     padding: 2em 0;
-    background-color: #d62828;
-    color: #fff;
+    border-bottom: 2px solid #d62828;
+    animation: fadeIn 2s ease-in-out;
 }
 
 header h1 {
-    font-size: 2.5em;
-    margin: 0.5em 0;
+    font-family: Arial, sans-serif;
+    color: #d62828;
 }
 
-header p {
-    font-size: 1.2em;
-    margin: 0;
+/* Fade-In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-/* Carousel Styles */
-#carousel {
+/* Navigation */
+header nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    background-color: #333;
+    padding: 1rem;
+}
+
+header nav ul li {
+    margin: 0 1rem;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Content Section */
+.content {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content a {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+    background: #d62828;
+    color: #fff;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 1em;
+}
+
+.btn:hover {
+    background: #b22222;
+}
+.carousel {
+    text-align: center;
     margin: 2em auto;
 }
 
-#carousel h2 {
+.carousel h2 {
+    font-family: Arial, sans-serif;
     font-size: 2em;
     color: #d62828;
     margin-bottom: 1em;
 }
-/* Universal Image Container for All Future Inserts */
-.image-container {
-    width: 400px; /* Twice the size of the previous container */
-    height: 400px; /* Maintain aspect ratio */
-    margin: 0 auto 1em; /* Center the container */
-    overflow: hidden; /* Ensure the image fits within the box */
-    border-radius: 10px; /* Optional: Rounded corners for aesthetics */
-    background-color: #f4f4f4; /* Optional: Background color */
+
+.carousel-buttons {
     display: flex;
-    align-items: center;
     justify-content: center;
+    gap: 1.5em;
+    flex-wrap: wrap;
 }
 
-.image-container img {
-    width: 100%; /* Scale the image to fit the container */
-    height: 100%;
-    object-fit: cover; /* Maintain aspect ratio and cover the box */
-}
-
-.carousel-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-.carousel {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.carousel-item {
-    min-width: 100%;
+.carousel-buttons a {
+    text-decoration: none;
     text-align: center;
+    display: inline-block;
+    width: 200px;
+    padding: 1em;
+    background-color: #f4f4f4;
+    border: 2px solid #d62828;
+    border-radius: 10px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.carousel-item img {
-    width: 80px;
+.carousel-buttons a:hover {
+    background-color: #d62828;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.carousel-buttons img {
+    display: block;
+    margin: 0 auto 0.5em;
+    max-width: 80px;
     height: auto;
-    margin-bottom: 0.5em;
-    border-radius: 50%;
 }
 
-.carousel-item p {
-    font-size: 1.1em;
+.carousel-buttons span {
+    font-family: Arial, sans-serif;
+    font-size: 1em;
     color: #333;
 }
 
-.carousel-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: #fff;
-    border: none;
-    font-size: 2em;
-    cursor: pointer;
-    padding: 0.5em;
-}
-
-.carousel-control.prev {
-    left: 10px;
-}
-
-.carousel-control.next {
-    right: 10px;
-}
-
-.carousel-control:hover {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-/* Footer Styles */
+/* Footer */
 footer {
+    text-align: center;
+    padding: 1rem;
     background-color: #333;
     color: #fff;
-    padding: 1em 0;
-    font-size: 0.9em;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+  
 }
