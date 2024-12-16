@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pub Philosophy</title>
+    <link rel="stylesheet" href="TestStyles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Welcome to Pub Philosophy</h1>
+        <p>Engaging minds, over drinks, on life's biggest questions.</p>
+    </header>
+
+    <!-- Carousel Section -->
+    <section id="carousel">
+        <h2>Our Events</h2>
+        <div class="carousel-container">
+            <div class="carousel">
+                <!-- Hoxton Cabin -->
+                <div class="carousel-item">
+				<p>London<p>
+                    <a href="hoxton-cabin.html">
+						<img src="images/BtnShield.webp" alt="Hoxton Cabin">
+                        <p>Pub Philosophy at Hoxton Cabin</p>
+                    </a>
+                </div>
+                <!-- Café Philosophy -->
+                <div class="carousel-item">
+				   <p>Geneva<p>
+                    <a href="cafe-philosophy.html">
+					    <img src="images/SwissBtn.webp" alt="Café Philosophy">
+                        <p>Café Philosophy at MLR</p>
+                    </a>
+                </div>
+                <!-- Flanagan's Pub -->
+                <div class="carousel-item">
+                    <p>Geneva<p>
+					<a href="flanagans-pub.html">
+	                    <img src="images/SwissBtn.webp" alt="Flanagan's Pub">
+                        <p>Pub Philosophy at Flanagan's</p>
+                    </a>
+                </div>
+            </div>
+            <!-- Navigation Controls -->
+            <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
+            <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 Pub Philosophy | Powered by Myndworkz Ltd</p>
+    </footer>
+
+    <!-- Carousel Script -->
+    <script>
+        let currentSlide = 0;
+
+        function moveCarousel(direction) {
+            const carousel = document.querySelector('.carousel');
+            const totalSlides = carousel.children.length;
+
+            currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+            const offset = -currentSlide * 100;
+
+            carousel.style.transform = `translateX(${offset}%)`;
+        }
+    </script>
+</body>
+</html>
