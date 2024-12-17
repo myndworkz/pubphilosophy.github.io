@@ -112,55 +112,6 @@ header nav ul li a {
 .btn:hover {
     background: #b22222;
 }
-.carousel {
-    text-align: center;
-    margin: 2em auto;
-}
-
-.carousel h2 {
-    font-family: Arial, sans-serif;
-    font-size: 2em;
-    color: #d62828;
-    margin-bottom: 1em;
-}
-
-.carousel-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1.5em;
-    flex-wrap: wrap;
-}
-
-.carousel-buttons a {
-    text-decoration: none;
-    text-align: center;
-    display: inline-block;
-    width: 200px;
-    padding: 1em;
-    background-color: #f4f4f4;
-    border: 2px solid #d62828;
-    border-radius: 10px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.carousel-buttons a:hover {
-    background-color: #d62828;
-    color: #fff;
-    transform: scale(1.1);
-}
-
-.carousel-buttons img {
-    display: block;
-    margin: 0 auto 0.5em;
-    max-width: 80px;
-    height: auto;
-}
-
-.carousel-buttons span {
-    font-family: Arial, sans-serif;
-    font-size: 1em;
-    color: #333;
-}
 
 /* Footer */
 footer {
