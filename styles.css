@@ -5,24 +5,12 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     color: #333;
-}
-/* Global Text Padding */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
     line-height: 1.6;
 }
 
-..container, .navbar, footer {
+/* Global Padding */
+.container, header, .navbar, footer {
     padding: 0 1in;
-}
-
-
-header, .splash-content, .about-section, .events-section {
-    padding: 0 1in; /* Applies the same padding to headers and main sections */
 }
 
 /* Header */
@@ -45,7 +33,7 @@ header p {
 }
 
 /* Navigation Bar */
-..navbar {
+.navbar {
     background-color: #333;
     padding: 0.5em 0;
 }
@@ -60,25 +48,18 @@ header p {
 }
 
 .navbar ul li a {
-    color: white;
+    display: inline-block;
     text-decoration: none;
     padding: 0.5em 1em;
-    border: 1px solid white;
     border-radius: 5px;
+    color: white;
     background-color: #444;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .navbar ul li a:hover {
     background-color: white;
     color: #444;
-}
-
-
-/* Splash Section */
-.splash-content {
-    text-align: center;
-    margin: 2em 0;
 }
 
 /* Image Container */
@@ -95,7 +76,6 @@ header p {
     height: auto;
     object-fit: cover;
 }
-
 /* Carousel Buttons */
 .carousel-buttons {
     display: flex;
@@ -104,34 +84,34 @@ header p {
     margin: 2em 0;
 }
 
-.btn-small {
+.carousel-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    padding: 0.5em;
-    border: none;
     background-color: transparent;
+    border: none;
     cursor: pointer;
     text-align: center;
-    transition: transform 0.2s;
+    padding: 0.5em; /* Small padding for compact size */
+    transition: transform 0.2s ease;
 }
 
-.btn-small:hover {
-    transform: scale(1.1);
+.carousel-btn:hover {
+    transform: scale(1.1); /* Adds subtle hover effect */
 }
 
 .btn-image {
-    width: 80px; /* Reduced size for button images */
+    width: 80px; /* Consistent size for button images */
     height: 80px;
-    margin-bottom: 0.5em;
     object-fit: cover;
     border-radius: 50%; /* Makes images circular */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5em;
 }
 
-.btn-small span {
-    font-size: 0.9em;
+.carousel-btn span {
+    font-size: 0.9em; /* Smaller font size for button labels */
     color: #333;
     margin-top: 0.3em;
 }
@@ -139,17 +119,18 @@ header p {
 /* Buttons */
 .btn {
     display: inline-block;
-    margin: 1em 0;
-    padding: 0.5em 1.5em;
     background-color: #d62828;
     color: white;
+    padding: 0.8em 1.5em;
     text-decoration: none;
     border-radius: 5px;
+    margin-top: 1em;
+    font-size: 1em;
     transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #a00000;
+    background-color: #b22222;
 }
 
 /* Footer */
@@ -165,5 +146,9 @@ footer {
     .navbar ul {
         flex-direction: column;
         gap: 0.5em;
+    }
+
+    .container, header, .navbar, footer {
+        padding: 0 1em; /* Reduced padding for smaller screens */
     }
 }
