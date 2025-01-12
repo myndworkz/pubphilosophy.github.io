@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Myndworkz Ltd</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Contact</h1>
+        <p><em>Slicing and dicing the world at its joints</em></p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+            <li><a href="services.html" class="nav-link">Learning Plans</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Contact Me</h2>
+        <p>You can reach me at <a href="mailto:bryn.williams@myndworkz.uk">bryn.williams@myndworkz.uk</a>, or fill in your details in the form below, and I'll be in touch as soon as I can.</p>
+
+        <!-- Contact Form -->
+        <form action="https://formspree.io/f/mdkogbpk" method="POST" class="contact-form">
+            <label for="email">Your email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Your message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Myndworkz Ltd. All rights reserved.</p>
+    </footer>
+</body>
+</html>
