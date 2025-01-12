@@ -16,9 +16,10 @@ body {
     line-height: 1.6;
 }
 
-.container, .navbar, footer {
-    padding: 0 1in; /* Adds 1 inch padding to left and right edges */
+..container, .navbar, footer {
+    padding: 0 1in;
 }
+
 
 header, .splash-content, .about-section, .events-section {
     padding: 0 1in; /* Applies the same padding to headers and main sections */
@@ -44,7 +45,7 @@ header p {
 }
 
 /* Navigation Bar */
-.navbar {
+..navbar {
     background-color: #333;
     padding: 0.5em 0;
 }
@@ -73,6 +74,7 @@ header p {
     color: #444;
 }
 
+
 /* Splash Section */
 .splash-content {
     text-align: center;
@@ -93,6 +95,7 @@ header p {
     height: auto;
     object-fit: cover;
 }
+
 /* Carousel Buttons */
 .carousel-buttons {
     display: flex;
