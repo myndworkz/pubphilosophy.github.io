@@ -9,8 +9,30 @@ body {
 }
 
 /* Global Padding */
-.container, header, .navbar, footer {
+.container, header, .navbar, footer, .events-section, .splash, .about-section {
+    padding: 0 1in; /* Ensures text is brought in from edges */
+    box-sizing: border-box; /* Ensures padding does not affect width */
+}
+/* .container {
     padding: 0 1in;
+    max-width: 800px;
+    margin: 0 auto;
+}
+ */
+.text-box {
+    text-align: left;
+    margin-bottom: 2em;
+}
+
+.text-box h2 {
+    color: #d62828;
+    font-size: 1.8rem;
+    margin-bottom: 0.5em;
+}
+
+.text-box p {
+    font-size: 1rem;
+    line-height: 1.8;
 }
 
 /* Header */
@@ -62,26 +84,83 @@ header p {
     color: #444;
 }
 
-/* Image Container */
-.image-container {
-    max-width: 600px;
-    margin: 2em auto;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.hero {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2em;
 }
 
-.image-container img {
+.hero-image {
     width: 100%;
-    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.oval-image {
+    width: 120px; /* Adjusted for smaller width */
+    height: 160px; /* Height for a passport ratio */
+    border-radius: 50%; /* Oval effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     object-fit: cover;
 }
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    margin: 2em 0;
+}
+
+.inset-image {
+    max-width: 200px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Splash Buttons Centered */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2em;
+}
+
+.button-container a {
+    display: inline-block;
+    padding: 0.8em 1.5em;
+    background-color: #d62828;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.button-container a:hover {
+    background-color: #b22222;
+}
+
+/* Events Section */
+.events-container {
+    background-color: #000;
+    padding: 2em;
+    text-align: center;
+    border-radius: 10px;
+    color: #fff;
+    max-width: 600px;
+    margin: 2em auto; /* Centers the container */
+}
+
+.events-container h2 {
+    color: #fff;
+    margin-bottom: 1em;
+}
+
 /* Carousel Buttons */
 .carousel-buttons {
     display: flex;
     justify-content: center;
     gap: 1em;
-    margin: 2em 0;
 }
 
 .carousel-btn {
@@ -89,48 +168,62 @@ header p {
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    padding: 0.5em; /* Small padding for compact size */
-    transition: transform 0.2s ease;
+    padding: 0.5em;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    width: 120px; /* Ensures button consistency */
 }
 
 .carousel-btn:hover {
-    transform: scale(1.1); /* Adds subtle hover effect */
+    transform: scale(1.1);
+    background-color: #444;
 }
 
 .btn-image {
-    width: 80px; /* Consistent size for button images */
+    width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 50%; /* Makes images circular */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
     margin-bottom: 0.5em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-btn span {
-    font-size: 0.9em; /* Smaller font size for button labels */
-    color: #333;
+    font-size: 0.9em;
+    color: white;
     margin-top: 0.3em;
 }
 
-/* Buttons */
-.btn {
-    display: inline-block;
-    background-color: #d62828;
-    color: white;
-    padding: 0.8em 1.5em;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 1em;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+/* Image Container */
+.image-container {
+    max-width: 600px;
+    margin: 2em auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centers the image within its container */
 }
 
-.btn:hover {
-    background-color: #b22222;
+.image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.image-text-inline {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    margin: 2em 0;
+}
+
+.rectangle-image {
+    width: 240px; /* Twice the width of a passport photo */
+    height: 320px; /* Adjusted for proportion */
+    border-radius: 10px; /* Subtle rounding for aesthetics */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    object-fit: cover; /* Ensures the image is scaled proportionally */
 }
 
 /* Footer */
@@ -148,7 +241,11 @@ footer {
         gap: 0.5em;
     }
 
-    .container, header, .navbar, footer {
+    .container, header, .navbar, footer, .events-container {
         padding: 0 1em; /* Reduced padding for smaller screens */
+    }
+
+    .events-container {
+        max-width: 90%; /* Adjust width for smaller screens */
     }
 }
