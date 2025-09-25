@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Custom Mapbox Journeys</title>
+  <!-- Mapbox GL JS CSS -->
+  <link
+    href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+    rel="stylesheet"
+  />
+  <style>
+    body, html { margin:0; padding:0; height:100%; }
+    #map { width:100%; height:100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Mapbox GL JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <script>
+    // 1. Set your Mapbox access token
+    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+
+    // 2. Initialize the map
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v11', // or any other Mapbox style
+      center: [0, 20],   // [lng, lat]
+      zoom: 2
+    });
+
+    // 3. Define your journeys
+    //    Each journey has a name, a color, and an array of [lng, lat] coordinates
+    const journeys = [
+      {
+        name: 'Atlantic Crossing',
+        color: '#1d8ecf',
+        coords: [
+          [-0.1278, 51.5074],   // London
+          [-13.3836, 29.4241],  // Canary Islands
+          [-33.2048, 0.7893],   // Mid-Atlantic
+          [-48.5044, -1.4558]   // Belém, Brazil
+        ]
+      },
+      {
+        name: 'Mediterranean Route',
+        color: '#e55e5e',
+        coords: [
+          [-5.3536, 36.1699],   // Gibraltar
+          [-4.4204, 36.7202],   // Málaga
+          [14.0154, 35.6895],   // Sicily
+          [34.8516, 32.0374]    // Haifa
+        ]
+      }
+    ];
+
+    map.on('load', () => {
+      journeys.forEach((j, i) => {
+        // 4a. Add a GeoJSON source for the line
+        map.addSource(`route-${i}`, {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: { name: j.name },
+            geometry: {
+              type: 'LineString',
+              coordinates: j.coords
+            }
+          }
+        });
+
+        // 4b. Add the line layer
+        map.addLayer({
+          id: `route-line-${i}`,
+          type: 'line',
+          source: `route-${i}`,
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': j.color,
+            'line-width': 4,
+            'line-opacity': 0.8
+          }
+        });
+
+        // 4c. Add start and end markers
+        const start = new mapboxgl.Marker({ color: j.color })
+          .setLngLat(j.coords[0])
+          .setPopup(new mapboxgl.Popup().setText(`Start: ${j.name}`))
+          .addTo(map);
+
+        const end = new mapboxgl.Marker({ color: j.color })
+          .setLngLat(j.coords[j.coords.length - 1])
+          .setPopup(new mapboxgl.Popup().setText(`End: ${j.name}`))
+          .addTo(map);
+      });
+
+      // 5. Zoom & pan to show all routes
+      const allCoords = journeys.flatMap(j => j.coords);
+      const bounds = allCoords.reduce((b, coord) => b.extend(coord), new mapboxgl.LngLatBounds(allCoords[0], allCoords[0]));
+      map.fitBounds(bounds, { padding: 40 });
+    });
+  </script>
+</body>
+</html>
