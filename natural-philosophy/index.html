@@ -28,44 +28,34 @@
     .node {
       pointer-events: auto;
     }
-    .ui-header {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      z-index: 20;
-      pointer-events: none;
-    }
-    .map-links {
+    .speed-pill-control {
       position: fixed;
-      top: 1.5rem;
+      bottom: 1.25rem;
       right: 1.5rem;
-      z-index: 30;
-      display: flex;
-      gap: .6rem;
-    }
-    .map-links a,
-    .speed-toggle {
-      border: 1px solid rgba(15, 118, 110, .24);
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid #cbd5e1;
       border-radius: 999px;
-      padding: .55rem .9rem;
-      background: rgba(255, 255, 255, .92);
-      color: #134e4a;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .1);
-      font: 700 .8rem/1.2 ui-sans-serif, system-ui, sans-serif;
-      text-decoration: none;
+      background: rgba(255, 255, 255, .85);
+      color: #334155;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+      font: 700 .75rem/1.2 ui-sans-serif, system-ui, sans-serif;
       cursor: pointer;
+      user-select: none;
+      transition: all .2s ease;
     }
-    .map-links a:hover,
-    .speed-toggle:hover { background: #ecfdf5; }
-    .map-links a:focus-visible,
-    .speed-toggle:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
-    .speed-toggle { pointer-events: auto; }
+    .speed-pill-control:hover {
+      background: #fff;
+      border-color: #059669;
+      color: #059669;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+    }
+    .speed-pill-control:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
     @media (max-width: 600px) {
-      .ui-header { top: 1rem; left: 1rem; right: 1rem; }
-      .ui-header__title { font-size: 1.2rem; }
-      .ui-header__desc { max-width: 17rem; font-size: .68rem; }
-      .map-links { top: auto; right: 1rem; bottom: 1rem; }
-      .map-links a, .speed-toggle { padding: .5rem .7rem; font-size: .72rem; }
+      .speed-pill-control { right: 1rem; bottom: 1rem; }
     }
     #ball-tooltip {
       z-index: 30;
@@ -209,19 +199,10 @@
 </head>
 <body>
 
-  <!-- Floating UI Header -->
-  <header class="ui-header">
-    <h1 class="ui-header__title">Natural Philosophy</h1>
-    <p class="ui-header__desc">
-      Tap the golden sphere to open the archive pages. Click any floating philosopher card for details. Change the bubbles' pace:
-      <span id="speed-indicator" class="speed-badge">Moderate</span>
-    </p>
-  </header>
-  <nav class="map-links" aria-label="Archive links">
-    <button id="speed-toggle" class="speed-toggle" type="button">Bubble speed</button>
-    <a href="library.html">Text archive</a>
-    <a href="../index.html">Pub Philosophy</a>
-  </nav>
+  <button id="speed-toggle-pill" class="speed-pill-control" type="button" title="Click to cycle float speed">
+    <span>Float Speed:</span>
+    <span id="speed-indicator" style="color:#059669">Moderate</span>
+  </button>
 
   <!-- Species Hover Tooltip -->
   <div id="ball-tooltip" class="hidden">
@@ -258,9 +239,10 @@
   <noscript>
     <nav style="position:fixed;bottom:1rem;left:1rem;z-index:50;font-size:0.875rem">
       <a href="events.html">Events</a> ·
-      <a href="what-is-it.html">What It Is ?</a> ·
+      <a href="what-is-it.html">What It Is</a> ·
       <a href="history-philosophy.html">History</a> ·
-      <a href="philosophy-archive.html">Archive</a>
+      <a href="workshops.html">Workshops</a> ·
+      <a href="library.html">Archive</a>
     </nav>
   </noscript>
 
@@ -361,14 +343,15 @@
 
     const GRAPH = [
       {
-        id: 'natphil', size: 'sphere--lg', theme: 'theme-natphil', anchor: [0.50, 0.48],
+        id: 'natphil', size: 'sphere--lg', theme: 'theme-natphil', anchor: [0.50, 0.52],
         aria: 'Natural Philosophy',
         html: `${BOOK_ICON}<span class="sphere__label" style="color:#451a03">Natural<br>Philosophy</span>`,
         children: [
           { id: 'natphil-events',  label: 'Events',      href: 'events.html',             chip: 'chip--amber' },
           { id: 'natphil-what',    label: 'What Is It?', href: 'what-is-it.html',         chip: 'chip--orange' },
           { id: 'natphil-history', label: 'History',     href: 'history-philosophy.html', chip: 'chip--amberdeep' },
-          { id: 'natphil-workshops', label: 'Workshops', href: 'workshops.html', chip: 'chip--teal' }
+          { id: 'natphil-workshops', label: 'Workshops', href: 'workshops.html', chip: 'chip--teal' },
+          { id: 'natphil-archive', label: 'Archive', href: 'library.html', chip: 'chip--emerdeep' }
         ]
       }
     ];
@@ -586,6 +569,20 @@
           n.x = p.x; n.y = p.y;
         }
         n.vx = n.vy = 0;
+      });
+    }
+
+    function layoutExpandedClusters() {
+      expanded.forEach(rootId => {
+        const root = nodes.get(rootId);
+        const children = GRAPH.find(group => group.id === rootId).children.map(child => nodes.get(child.id));
+        children.forEach((child, index) => {
+          const angle = -Math.PI / 2 + (index / children.length) * Math.PI * 2;
+          const distance = root.r + child.r + PHYS.gapChild;
+          child.x = Math.min(Math.max(root.x + Math.cos(angle) * distance, child.r + PHYS.wallPad), screenW - child.r - PHYS.wallPad);
+          child.y = Math.min(Math.max(root.y + Math.sin(angle) * distance, child.r + PHYS.wallPad), screenH - child.r - PHYS.wallPad);
+          child.vx = child.vy = 0;
+        });
       });
     }
 
@@ -1055,6 +1052,7 @@
       safeBottom = window.innerWidth <= 600 ? 76 : 16;
       sizeCanvas();
       layoutInitial();
+      layoutExpandedClusters();
       renderGraph();
       balls.forEach(b => {
         b.x = Math.min(Math.max(b.x, b.radius), cw - b.radius);
@@ -1094,13 +1092,13 @@
       speedIndex = (speedIndex + 1) % speedLevels.length;
       if (speedIndicator) speedIndicator.textContent = speedLevels[speedIndex].label;
     }
-    document.getElementById('speed-toggle').addEventListener('click', cycleSpeed);
+    document.getElementById('speed-toggle-pill').addEventListener('click', cycleSpeed);
     if (speedIndicator) {
       speedIndicator.textContent = speedLevels[speedIndex].label;
     }
 
     window.addEventListener('click', e => {
-      if (isModalOpen || e.target.closest('.node') || e.target.closest('.tree-modal-card') || e.target.closest('.map-links')) return;
+      if (isModalOpen || e.target.closest('.node') || e.target.closest('.tree-modal-card') || e.target.closest('.speed-pill-control')) return;
 
       let clickedBall = null;
       for (let i = balls.length - 1; i >= 0; i--) {
