@@ -1,55 +1,1129 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Explore the Natural Philosophy archive: conversations, history, gatherings and workshops.">
-  <title>Natural Philosophy Archive</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Natural Philosophy</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Layer hierarchy: canvas behind, nodes and modals in front */
+    #canvas-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: auto;
+    }
+    #interactive-map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .node {
+      pointer-events: auto;
+    }
+    .ui-header {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .map-links {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 30;
+      display: flex;
+      gap: .6rem;
+    }
+    .map-links a,
+    .speed-toggle {
+      border: 1px solid rgba(15, 118, 110, .24);
+      border-radius: 999px;
+      padding: .55rem .9rem;
+      background: rgba(255, 255, 255, .92);
+      color: #134e4a;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .1);
+      font: 700 .8rem/1.2 ui-sans-serif, system-ui, sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .map-links a:hover,
+    .speed-toggle:hover { background: #ecfdf5; }
+    .map-links a:focus-visible,
+    .speed-toggle:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
+    .speed-toggle { pointer-events: auto; }
+    @media (max-width: 600px) {
+      .ui-header { top: 1rem; left: 1rem; right: 1rem; }
+      .ui-header__title { font-size: 1.2rem; }
+      .ui-header__desc { max-width: 17rem; font-size: .68rem; }
+      .map-links { top: auto; right: 1rem; bottom: 1rem; }
+      .map-links a, .speed-toggle { padding: .5rem .7rem; font-size: .72rem; }
+    }
+    #ball-tooltip {
+      z-index: 30;
+    }
+
+    /* 2x Sphere Sizing */
+    .sphere--lg {
+      width: 220px !important;
+      height: 220px !important;
+      min-width: 220px !important;
+      min-height: 220px !important;
+      font-size: 1.15rem !important;
+    }
+    .sphere--md {
+      width: 184px !important;
+      height: 184px !important;
+      min-width: 184px !important;
+      min-height: 184px !important;
+      font-size: 1.05rem !important;
+    }
+    .sphere__glyph {
+      font-size: 2.6rem !important;
+      line-height: 1 !important;
+      margin-bottom: 4px !important;
+    }
+
+    /* Modal Card */
+    .tree-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease-out;
+    }
+    .tree-modal-backdrop.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tree-modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      border: 1.5px solid #059669;
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tree-modal-backdrop.is-active .tree-modal-card {
+      transform: scale(1);
+    }
+    .tree-modal-image {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      background-color: #f1f5f9;
+    }
+    .tree-modal-body {
+      padding: 1.5rem;
+    }
+    .tree-modal-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #047857;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      margin-bottom: 0.5rem;
+    }
+    .tree-modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .tree-modal-latin {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: #059669;
+      margin-top: 0.25rem;
+      margin-bottom: 0.85rem;
+    }
+    .tree-modal-desc {
+      font-size: 0.875rem;
+      line-height: 1.55;
+      color: #475569;
+      margin-bottom: 1.25rem;
+    }
+    .tree-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1rem;
+    }
+    .tree-modal-link {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #059669;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tree-modal-link:hover {
+      text-decoration: underline;
+    }
+    .tree-modal-close-btn {
+      background: #f1f5f9;
+      border: none;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tree-modal-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    @media (max-width: 600px) {
+      .sphere--lg { width: 176px !important; height: 176px !important; min-width: 176px !important; min-height: 176px !important; }
+      .sphere--md { width: 144px !important; height: 144px !important; min-width: 144px !important; min-height: 144px !important; }
+    }
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">✳</span><span>Natural<br>Philosophy <small>Archive</small></span></a>
-      <nav aria-label="Main navigation">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="what-is-it.html">What is it?</a>
-        <a href="history-philosophy.html">Our history</a>
-        <a href="events.html">Events and gatherings</a>
-        <a href="workshops.html">Philosophy workshops</a>
-      </nav>
-    </div>
+
+  <!-- Floating UI Header -->
+  <header class="ui-header">
+    <h1 class="ui-header__title">Natural Philosophy</h1>
+    <p class="ui-header__desc">
+      Tap the golden sphere to open the archive pages. Click any floating philosopher card for details. Change the bubbles' pace:
+      <span id="speed-indicator" class="speed-badge">Moderate</span>
+    </p>
   </header>
-  <main id="main">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div>
-          <p class="eyebrow">The Natural Philosophy Archive</p>
-          <h1>Come curious.<br><em>Leave thinking.</em></h1>
-          <p class="hero-intro">Big questions, open minds and conversations over a drink. Explore the ideas and stories behind pub and café philosophy.</p>
-          <a class="button" href="what-is-it.html">Discover the idea <span aria-hidden="true">↗</span></a>
+  <nav class="map-links" aria-label="Archive links">
+    <button id="speed-toggle" class="speed-toggle" type="button">Bubble speed</button>
+    <a href="library.html">Text archive</a>
+    <a href="../index.html">Pub Philosophy</a>
+  </nav>
+
+  <!-- Species Hover Tooltip -->
+  <div id="ball-tooltip" class="hidden">
+    <div id="tooltip-title" class="tooltip-title"></div>
+    <div id="tooltip-latin" class="tooltip-latin"></div>
+    <div id="tooltip-category" class="tooltip-cat"></div>
+  </div>
+
+  <!-- Detail Modal Card -->
+  <div id="tree-modal" class="tree-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="tree-modal-card">
+      <img id="modal-img" class="tree-modal-image" src="" alt="Botanical Photograph">
+      <div class="tree-modal-body">
+        <span id="modal-category" class="tree-modal-badge">Category</span>
+        <h2 id="modal-title" class="tree-modal-title">Common Name</h2>
+        <div id="modal-latin" class="tree-modal-latin">Scientific Name</div>
+        <p id="modal-desc" class="tree-modal-desc">Description of species.</p>
+        <div class="tree-modal-footer">
+          <a id="modal-link" class="tree-modal-link" href="#" target="_blank" rel="noopener noreferrer">Learn more →</a>
+          <button id="modal-close" class="tree-modal-close-btn" type="button">Close</button>
         </div>
-        <div class="hero-image">
-          <img src="../people%20discussing%20in%20a%20pub.%20%20.webp" alt="People in conversation in a pub">
-          <p>Philosophy belongs wherever people gather.</p>
-        </div>
       </div>
-    </section>
-    <section class="explore wrap" aria-labelledby="explore-title">
-      <div class="section-heading">
-        <div><p class="eyebrow">Explore the archive</p><h2 id="explore-title">A place for ideas.</h2></div>
-        <p>From the origins of café philosophy to the value of conversation in the workplace.</p>
-      </div>
-      <div class="card-grid">
-        <a class="card card-teal" href="what-is-it.html"><span class="card-number">01 / THE IDEA</span><h3>What is it?</h3><p>A democratic, welcoming approach to philosophical discussion.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
-        <a class="card card-cream" href="history-philosophy.html"><span class="card-number">02 / THE STORY</span><h3>Our history</h3><p>From Parisian cafés to London pubs and conversations around the world.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
-        <a class="card card-cream" href="events.html"><span class="card-number">03 / THE GATHERINGS</span><h3>Events &amp; gatherings</h3><p>Explore the archived London and Geneva event information.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
-        <a class="card card-coral" href="workshops.html"><span class="card-number">04 / THE WORKPLACE</span><h3>Philosophy workshops</h3><p>How thoughtful discussion can enrich the way we work together.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
-      </div>
-      <p class="archive-note">This site preserves archived material. Event details may have changed; check the linked venues for current information.</p>
-    </section>
+    </div>
+  </div>
+
+  <!-- Background Canvas -->
+  <canvas id="canvas-bg"></canvas>
+
+  <!-- Elastic Graph Mind Map Layer -->
+  <main id="interactive-map">
+    <svg id="svg-connections" class="w-full h-full absolute inset-0 pointer-events-none"></svg>
   </main>
-  <footer class="site-footer"><div class="wrap footer-inner"><p>Natural Philosophy Archive<br><span>Ideas are better shared.</span></p><a href="../index.html">Visit Pub Philosophy ↗</a></div></footer>
+
+  <noscript>
+    <nav style="position:fixed;bottom:1rem;left:1rem;z-index:50;font-size:0.875rem">
+      <a href="events.html">Events</a> ·
+      <a href="what-is-it.html">What It Is ?</a> ·
+      <a href="history-philosophy.html">History</a> ·
+      <a href="philosophy-archive.html">Archive</a>
+    </nav>
+  </noscript>
+
+  <script>
+    // --- NATIVE WEB AUDIO SYNTHESIZER ---
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // 1. "Boing" on node contact / tap
+    function playBoing() {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(360, now + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(170, now + 0.32);
+
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.38);
+      } catch (_) {}
+    }
+
+    // 2. "Woop" on opening sub-pages / modals
+    function playWoop() {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(680, now + 0.16);
+
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.20);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      } catch (_) {}
+    }
+
+    // 3. "Swish" on branch expansion
+    function playSwish() {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const bufferSize = audioCtx.sampleRate * 0.16;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(750, now);
+        filter.frequency.exponentialRampToValueAtTime(2200, now + 0.12);
+        filter.Q.value = 1.6;
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        noise.start(now);
+      } catch (_) {}
+    }
+
+    // Graph Definitions
+    const BOOK_ICON = `<span class="sphere__glyph" aria-hidden="true">💬</span>`;
+    const LEAF_ICON = `<span class="sphere__glyph" aria-hidden="true">🍃</span>`;
+
+    const GRAPH = [
+      {
+        id: 'natphil', size: 'sphere--lg', theme: 'theme-natphil', anchor: [0.50, 0.48],
+        aria: 'Natural Philosophy',
+        html: `${BOOK_ICON}<span class="sphere__label" style="color:#451a03">Natural<br>Philosophy</span>`,
+        children: [
+          { id: 'natphil-events',  label: 'Events',      href: 'events.html',             chip: 'chip--amber' },
+          { id: 'natphil-what',    label: 'What Is It?', href: 'what-is-it.html',         chip: 'chip--orange' },
+          { id: 'natphil-history', label: 'History',     href: 'history-philosophy.html', chip: 'chip--amberdeep' },
+          { id: 'natphil-workshops', label: 'Workshops', href: 'workshops.html', chip: 'chip--teal' }
+        ]
+      }
+    ];
+
+    const TOOLTIP_TEXT = {
+      natphil: "This is the term I am adopting for the philosophy that we do in person, in real time and with others."
+    };
+
+    const ballTooltip = document.getElementById('ball-tooltip');
+
+    function showBallTooltip(id, e, data) {
+      const titleEl = document.getElementById('tooltip-title');
+      const latinEl = document.getElementById('tooltip-latin');
+      const catEl = document.getElementById('tooltip-category');
+      if (!ballTooltip || !titleEl) return;
+
+      if (data && typeof data === 'object') {
+        titleEl.textContent = data.name || data.title || '';
+        if (latinEl) latinEl.textContent = data.latin || data.botanical || '';
+        if (catEl) catEl.textContent = data.category || data.region || '';
+      } else if (typeof TOOLTIP_TEXT !== 'undefined' && TOOLTIP_TEXT[id]) {
+        titleEl.textContent = TOOLTIP_TEXT[id];
+        if (latinEl) latinEl.textContent = '';
+        if (catEl) catEl.textContent = '';
+      }
+
+      ballTooltip.style.opacity = '1';
+      ballTooltip.classList.remove('hidden');
+
+      let x = null, y = null;
+      if (e && typeof e.clientX === 'number' && isFinite(e.clientX)) {
+        x = e.clientX;
+        y = e.clientY;
+      } else if (nodes.get(id)) {
+        const node = nodes.get(id);
+        if (node && node.body) {
+          const rect = node.body.getBoundingClientRect();
+          x = rect.left + rect.width / 2;
+          y = rect.top + rect.height / 2;
+        }
+      }
+      if (x !== null && y !== null) positionBallTooltip(x, y);
+    }
+
+    function hideBallTooltip() {
+      if (!ballTooltip) return;
+      ballTooltip.classList.add('hidden');
+      ballTooltip.style.opacity = '0';
+    }
+
+    function positionBallTooltip(x, y) {
+      if (!ballTooltip) return;
+      const pad = 12;
+      const ttW = Math.min(320, window.innerWidth - 2 * pad);
+      let left = x + 14;
+      let top = y + 14;
+      if (left + ttW > window.innerWidth - pad) left = x - ttW - 14;
+      if (top + 60 > window.innerHeight - pad) top = y - 60 - 14;
+      ballTooltip.style.left = left + 'px';
+      ballTooltip.style.top = top + 'px';
+    }
+
+    // Modal Controller
+    const modalBackdrop = document.getElementById('tree-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalCat = document.getElementById('modal-category');
+    const modalTitle = document.getElementById('modal-title');
+    const modalLatin = document.getElementById('modal-latin');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalLink = document.getElementById('modal-link');
+    const modalClose = document.getElementById('modal-close');
+    let isModalOpen = false;
+
+    function openModal(data) {
+      if (!data) return;
+      playWoop();
+      isModalOpen = true;
+      hideBallTooltip();
+      modalImg.onerror = () => {
+        const initials = data.name.split(/\s+/).map(part => part[0]).join('').slice(0, 2);
+        const hue = [...data.name].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
+        const portrait = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320"><defs><linearGradient id="g" x2="0" y2="1"><stop stop-color="hsl(${hue} 48% 88%)"/><stop offset="1" stop-color="hsl(${hue} 44% 64%)"/></linearGradient></defs><rect width="640" height="320" fill="url(%23g)"/><circle cx="320" cy="112" r="52" fill="#f3d3b1"/><path d="M268 104q8-75 58-62 43 2 50 62-30-29-108 0M192 320q9-130 128-130t128 130" fill="#314642"/><text x="320" y="286" text-anchor="middle" fill="white" font-family="sans-serif" font-size="30" font-weight="700">${initials}</text></svg>`;
+        modalImg.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(portrait)}`;
+        modalImg.onerror = null;
+      };
+      modalImg.src = data.largeImg || data.imgUrl || '';
+      modalCat.textContent = data.category || '';
+      modalTitle.textContent = data.name || data.title || '';
+      modalLatin.textContent = data.latin || '';
+      modalDesc.textContent = data.description || '';
+      if (data.detailUrl) {
+        modalLink.href = data.detailUrl;
+        modalLink.style.display = 'inline-flex';
+      } else {
+        modalLink.style.display = 'none';
+      }
+      modalBackdrop.classList.add('is-active');
+      modalBackdrop.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      isModalOpen = false;
+      modalBackdrop.classList.remove('is-active');
+      modalBackdrop.setAttribute('aria-hidden', 'true');
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', e => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isModalOpen) closeModal();
+    });
+
+    let lastHoverId = null;
+    window.addEventListener('mousemove', e => {
+      if (drag || isModalOpen) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (!el) { if (lastHoverId) { lastHoverId = null; hideBallTooltip(); } return; }
+      const body = el.closest && el.closest('.node__body');
+      if (body && body.dataset && body.dataset.nodeId) {
+        const id = body.dataset.nodeId;
+        if (id !== lastHoverId) {
+          lastHoverId = id;
+          if (nodes.get(id) && nodes.get(id).isRoot) {
+            requestAnimationFrame(() => { showBallTooltip(id, e); });
+          }
+        } else {
+          positionBallTooltip(e.clientX, e.clientY);
+        }
+      } else {
+        if (lastHoverId) { lastHoverId = null; hideBallTooltip(); }
+      }
+    }, { passive: true });
+
+    const PHYS = {
+      repel: 3.2, repelPad: 45,
+      stiffChild: 0.055, stiffRoot: 0.022,
+      gapChild: 56, restRoot: 480,
+      damping: 0.87, maxSpeed: 46,
+      anchorPull: 0.0018, restitution: 0.45, wallPad: 12
+    };
+
+    let screenW = window.innerWidth;
+    let screenH = window.innerHeight;
+    const nodes = new Map();
+    const edges = [];
+    const expanded = new Set();
+    const map = document.getElementById('interactive-map');
+    const svg = document.getElementById('svg-connections');
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    function buildNode(cfg, parentId) {
+      const wrap = document.createElement('div');
+      wrap.className = 'node' + (parentId ? ' is-collapsed' : '');
+      wrap.id = 'node-' + cfg.id;
+      const isRoot = !parentId;
+      const body = document.createElement(isRoot ? 'button' : 'a');
+
+      if (isRoot) {
+        body.type = 'button';
+        body.className = `node__body sphere ${cfg.size} ${cfg.theme}`;
+        body.setAttribute('aria-expanded', 'false');
+        body.setAttribute('aria-label', cfg.aria);
+        body.innerHTML = cfg.html;
+        body.dataset.nodeId = cfg.id;
+      } else {
+        body.href = cfg.href;
+        body.className = `node__body chip ${cfg.chip}`;
+        body.setAttribute('draggable', 'false');
+        body.textContent = cfg.label;
+        body.dataset.nodeId = cfg.id;
+      }
+
+      wrap.appendChild(body);
+      if (parentId) wrap.setAttribute('inert', '');
+      map.appendChild(wrap);
+
+      nodes.set(cfg.id, {
+        id: cfg.id, el: wrap, body,
+        x: 0, y: 0, vx: 0, vy: 0, r: isRoot ? 92 : 24,
+        active: isRoot, isRoot, parent: parentId || null,
+        invMass: isRoot ? 0.45 : 1,
+        anchor: cfg.anchor || null
+      });
+
+      attachPointer(cfg.id, body, wrap, isRoot);
+    }
+
+    GRAPH.forEach(root => {
+      buildNode(root, null);
+      root.children.forEach(child => buildNode(child, root.id));
+      edges.push(...root.children.map(c => ({ from: root.id, to: c.id, kind: 'child' })));
+    });
+
+
+    edges.forEach(edge => {
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('class', edge.kind === 'thick' ? 'connection-line--thick' : 'connection-line');
+      svg.appendChild(path);
+      edge.pathEl = path;
+    });
+
+    function measureNodes() {
+      nodes.forEach(n => { n.r = Math.max(22, n.body.offsetWidth / 2); });
+    }
+
+    function layoutInitial() {
+      nodes.forEach(n => {
+        if (n.isRoot) {
+          n.x = screenW * n.anchor[0];
+          n.y = screenH * n.anchor[1];
+        } else {
+          const p = nodes.get(n.parent);
+          n.x = p.x; n.y = p.y;
+        }
+        n.vx = n.vy = 0;
+      });
+    }
+
+    function toggleCluster(rootId) {
+      const root = nodes.get(rootId);
+      const kids = GRAPH.find(g => g.id === rootId).children.map(c => nodes.get(c.id));
+      const isOpen = expanded.has(rootId);
+      root.body.setAttribute('aria-expanded', String(!isOpen));
+
+      if (isOpen) {
+        playBoing();
+        expanded.delete(rootId);
+        kids.forEach(k => {
+          k.active = false;
+          k.el.classList.add('is-collapsed');
+          k.el.setAttribute('inert', '');
+        });
+        return;
+      }
+
+      playSwish();
+      expanded.add(rootId);
+      kids.forEach((k, i) => {
+        k.active = true;
+        k.x = root.x;
+        k.y = root.y;
+        const spread = (i / kids.length) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+        k.vx = Math.cos(spread) * 22;
+        k.vy = Math.sin(spread) * 22;
+        k.el.classList.remove('is-collapsed');
+        k.el.removeAttribute('inert');
+      });
+    }
+
+    let drag = null;
+    let suppressClick = false;
+
+    function attachPointer(id, body, wrap, isRoot) {
+      body.addEventListener('dragstart', e => e.preventDefault());
+
+      body.addEventListener('pointerdown', e => {
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+        const n = nodes.get(id);
+        suppressClick = false;
+        drag = {
+          id,
+          ox: n.x - e.clientX, oy: n.y - e.clientY,
+          lastX: e.clientX, lastY: e.clientY,
+          startX: e.clientX, startY: e.clientY,
+          moved: false
+        };
+        wrap.classList.add('is-dragging');
+        try { body.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+
+      body.addEventListener('pointermove', e => {
+        if (!drag || drag.id !== id) return;
+        if (!drag.moved && Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY) > 6) {
+          drag.moved = true;
+        }
+        const n = nodes.get(id);
+        n.x = e.clientX + drag.ox;
+        n.y = e.clientY + drag.oy;
+        n.vx = e.clientX - drag.lastX;
+        n.vy = e.clientY - drag.lastY;
+        drag.lastX = e.clientX;
+        drag.lastY = e.clientY;
+      });
+
+      const endDrag = e => {
+        if (!drag || drag.id !== id) return;
+        suppressClick = drag.moved;
+        wrap.classList.remove('is-dragging');
+        try { body.releasePointerCapture(e.pointerId); } catch (_) {}
+        drag = null;
+      };
+
+      body.addEventListener('pointerup', endDrag);
+      body.addEventListener('pointercancel', endDrag);
+
+      body.addEventListener('click', e => {
+        e.stopPropagation();
+        if (suppressClick) {
+          e.preventDefault();
+          suppressClick = false;
+          return;
+        }
+        if (isRoot) {
+          e.preventDefault();
+          toggleCluster(id);
+        } else {
+          playWoop();
+        }
+      });
+    }
+
+    function restLength(edge, a, b) {
+      if (edge.kind === 'child') return a.r + b.r + PHYS.gapChild;
+      if (edge.kind === 'thick') return 520;
+      return 420;
+    }
+
+    function simulate(dt) {
+      if (isModalOpen) return;
+      const list = [...nodes.values()].filter(n => n.active);
+
+      for (let i = 0; i < list.length; i++) {
+        for (let j = i + 1; j < list.length; j++) {
+          const a = list[i], b = list[j];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy) || 0.01;
+          const minDist = a.r + b.r + PHYS.repelPad;
+          if (dist >= minDist) continue;
+          const f = ((minDist - dist) / minDist) * PHYS.repel * dt;
+          const nx = dx / dist, ny = dy / dist;
+          if (!drag || drag.id !== a.id) { a.vx -= nx * f * a.invMass; a.vy -= ny * f * a.invMass; }
+          if (!drag || drag.id !== b.id) { b.vx += nx * f * b.invMass; b.vy += ny * f * b.invMass; }
+        }
+      }
+
+      edges.forEach(edge => {
+        const a = nodes.get(edge.from), b = nodes.get(edge.to);
+        if (!a.active || !b.active) return;
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy) || 0.01;
+        const stiff = edge.kind === 'root' ? PHYS.stiffRoot : PHYS.stiffChild;
+        const f = (dist - restLength(edge, a, b)) * stiff * dt;
+        const fx = (dx / dist) * f, fy = (dy / dist) * f;
+        if (!drag || drag.id !== a.id) { a.vx += fx * a.invMass; a.vy += fy * a.invMass; }
+        if (!drag || drag.id !== b.id) { b.vx -= fx * b.invMass; b.vy -= fy * b.invMass; }
+      });
+
+      const damp = Math.pow(PHYS.damping, dt);
+      list.forEach(n => {
+        if (drag && drag.id === n.id) return;
+        if (n.isRoot) {
+          n.vx += (screenW * n.anchor[0] - n.x) * PHYS.anchorPull * dt;
+          n.vy += (screenH * n.anchor[1] - n.y) * PHYS.anchorPull * dt;
+        }
+        n.vx *= damp;
+        n.vy *= damp;
+        const speed = Math.hypot(n.vx, n.vy);
+        if (speed > PHYS.maxSpeed) {
+          n.vx = (n.vx / speed) * PHYS.maxSpeed;
+          n.vy = (n.vy / speed) * PHYS.maxSpeed;
+        }
+        n.x += n.vx * dt;
+        n.y += n.vy * dt;
+
+        const pad = n.r + PHYS.wallPad;
+        if (n.x < pad)                { n.x = pad;                n.vx = Math.abs(n.vx) * PHYS.restitution; }
+        else if (n.x > screenW - pad) { n.x = screenW - pad;     n.vx = -Math.abs(n.vx) * PHYS.restitution; }
+        if (n.y < pad)                { n.y = pad;                n.vy = Math.abs(n.vy) * PHYS.restitution; }
+        else if (n.y > screenH - pad) { n.y = screenH - pad;     n.vy = -Math.abs(n.vy) * PHYS.restitution; }
+      });
+    }
+
+    function renderGraph() {
+      nodes.forEach(n => {
+        n.el.style.transform = `translate3d(${n.x}px, ${n.y}px, 0)`;
+      });
+
+      edges.forEach(edge => {
+        const a = nodes.get(edge.from);
+        const b = nodes.get(edge.to);
+
+        if (!a || !b || !a.active || !b.active) {
+          edge.pathEl.style.display = 'none';
+          return;
+        }
+
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const nx = dx / dist;
+        const ny = dy / dist;
+
+        const startX = a.x + nx * Math.min(a.r - 2, dist * 0.4);
+        const startY = a.y + ny * Math.min(a.r - 2, dist * 0.4);
+        const endX   = b.x - nx * Math.min(b.r - 2, dist * 0.4);
+        const endY   = b.y - ny * Math.min(b.r - 2, dist * 0.4);
+
+        edge.pathEl.style.display = 'block';
+        edge.pathEl.setAttribute('d', `M ${startX} ${startY} L ${endX} ${endY}`);
+      });
+    }
+
+    const flagsDb = [
+      {
+        name: "Wales",
+        latin: "Cymru / Wales",
+        category: "National Flag",
+        imgUrl: "https://flagcdn.com/w160/gb-wls.png",
+        largeImg: "https://flagcdn.com/w640/gb-wls.png",
+        description: "Y Ddraig Goch (The Red Dragon), the flag of Wales.",
+        detailUrl: "https://en.wikipedia.org/wiki/Flag_of_Wales"
+      },
+      {
+        name: "London",
+        latin: "City of London",
+        category: "City Badge",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_the_City_of_London.svg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_the_City_of_London.svg?width=640",
+        description: "The arms of the City of London.",
+        detailUrl: "https://en.wikipedia.org/wiki/Coat_of_arms_of_the_City_of_London"
+      },
+      {
+        name: "Geneva",
+        latin: "Genève / Geneva",
+        category: "City Flag",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Geneva.svg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Geneva.svg?width=640",
+        description: "The flag of the city of Geneva.",
+        detailUrl: "https://en.wikipedia.org/wiki/Flag_of_Geneva"
+      }
+    ];
+
+    const philosophersDb = [
+      {
+        name: "Aristotle",
+        latin: "384–322 BC",
+        category: "Ancient",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Aristotle_Altemps_Inv8575.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Aristotle_Altemps_Inv8575.jpg?width=800",
+        description: "Student of Plato and founder of the Lyceum; a pioneer of logic, ethics and the study of nature.",
+        detailUrl: "https://en.wikipedia.org/wiki/Aristotle"
+      },
+      {
+        name: "Socrates",
+        latin: "c. 470–399 BC",
+        category: "Ancient",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Socrates_Louvre.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Socrates_Louvre.jpg?width=800",
+        description: "Athenian philosopher whose method of questioning in conversation shaped Western philosophy.",
+        detailUrl: "https://en.wikipedia.org/wiki/Socrates"
+      },
+      {
+        name: "Friedrich Nietzsche",
+        latin: "1844–1900",
+        category: "Modern",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Nietzsche187a.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Nietzsche187a.jpg?width=800",
+        description: "German philosopher known for perspectivism, the will to power and the critique of morality.",
+        detailUrl: "https://en.wikipedia.org/wiki/Friedrich_Nietzsche"
+      },
+      {
+        name: "Bertrand Russell",
+        latin: "1872–1970",
+        category: "Modern",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Bertrand_Russell_1957.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Bertrand_Russell_1957.jpg?width=800",
+        description: "British philosopher and logician, co-author of Principia Mathematica and a public campaigner.",
+        detailUrl: "https://en.wikipedia.org/wiki/Bertrand_Russell"
+      },
+      {
+        name: "Daniel Dennett",
+        latin: "1942–2024",
+        category: "Contemporary",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Daniel_Dennett_Oct2008.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Daniel_Dennett_Oct2008.jpg?width=800",
+        description: "American philosopher of mind and science, known for work on consciousness and evolution.",
+        detailUrl: "https://en.wikipedia.org/wiki/Daniel_Dennett"
+      },
+      {
+        name: "Jerry Fodor",
+        latin: "1935–2017",
+        category: "Contemporary",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Jerry_Fodor.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Jerry_Fodor.jpg?width=800",
+        description: "American philosopher of mind and cognitive science, known for the language of thought hypothesis.",
+        detailUrl: "https://en.wikipedia.org/wiki/Jerry_Fodor"
+      },
+      {
+        name: "Ludwig Wittgenstein",
+        latin: "1889–1951",
+        category: "Modern",
+        imgUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Ludwig_Wittgenstein.jpg?width=160",
+        largeImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Ludwig_Wittgenstein.jpg?width=800",
+        description: "Austrian-British philosopher of language and logic, author of the Tractatus and Philosophical Investigations.",
+        detailUrl: "https://en.wikipedia.org/wiki/Ludwig_Wittgenstein"
+      }
+    ];
+
+    const preloaded = {};
+    function preload(url) {
+      if (!preloaded[url]) {
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = url;
+        preloaded[url] = img;
+      }
+      return preloaded[url];
+    }
+    [...flagsDb, ...philosophersDb].forEach(d => {
+      preload(d.imgUrl);
+      if (d.largeImg) preload(d.largeImg);
+    });
+
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    let cw = window.innerWidth, ch = window.innerHeight;
+    let safeTop = 112;
+    let safeBottom = window.innerWidth <= 600 ? 76 : 16;
+
+    function sizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cw = window.innerWidth;
+      ch = window.innerHeight;
+      canvas.width = Math.round(cw * dpr);
+      canvas.height = Math.round(ch * dpr);
+      canvas.style.width = cw + 'px';
+      canvas.style.height = ch + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    const speedLevels = [
+      { label: 'Stopped',    mult: 0.0 },
+      { label: 'Slow Float', mult: 0.4 },
+      { label: 'Moderate',   mult: 1.0 }
+    ];
+    let speedIndex = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 2;
+
+    class Ball {
+      constructor() {
+        this.radius = Math.random() * 8 + 22;
+        this.mass = this.radius;
+        this.x = Math.random() * (cw - this.radius * 2) + this.radius;
+        this.y = Math.random() * (ch - safeTop - safeBottom - this.radius * 2) + safeTop + this.radius;
+        const a = Math.random() * Math.PI * 2;
+        const s = Math.random() * 1.5 + 1.2;
+        this.vx = Math.cos(a) * s;
+        this.vy = Math.sin(a) * s;
+        this.data = Math.random() < 0.25
+          ? flagsDb[Math.floor(Math.random() * flagsDb.length)]
+          : philosophersDb[Math.floor(Math.random() * philosophersDb.length)];
+        this.img = preload(this.data.imgUrl);
+      }
+      update(dt) {
+        if (isModalOpen) return;
+        const m = speedLevels[speedIndex].mult;
+        if (m === 0) return;
+        this.x += this.vx * m * dt;
+        this.y += this.vy * m * dt;
+        if (this.x - this.radius <= 0)       { this.x = this.radius;      this.vx = Math.abs(this.vx); }
+        else if (this.x + this.radius >= cw) { this.x = cw - this.radius; this.vx = -Math.abs(this.vx); }
+        if (this.y - this.radius <= safeTop)       { this.y = safeTop + this.radius; this.vy = Math.abs(this.vy); }
+        else if (this.y + this.radius >= ch - safeBottom) { this.y = ch - safeBottom - this.radius; this.vy = -Math.abs(this.vy); }
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = 0.95;
+
+        const w = this.radius * 2.3;
+        const h = this.radius * 1.65;
+        const x = this.x - w / 2;
+        const y = this.y - h / 2;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.16)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 2;
+        ctx.fillRect(x, y, w, h);
+
+        ctx.shadowColor = 'transparent';
+        const dw = w - 6, dh = h - 6;
+        if (this.img && this.img.complete && this.img.naturalWidth) {
+          const iw = this.img.naturalWidth, ih = this.img.naturalHeight;
+          const sc = Math.max(dw / iw, dh / ih);
+          const sw = dw / sc, sh = dh / sc;
+          ctx.beginPath();
+          ctx.rect(x + 3, y + 3, dw, dh);
+          ctx.clip();
+          ctx.drawImage(this.img, (iw - sw) / 2, 0, sw, sh, x + 3, y + 3, dw, dh);
+        } else {
+          const hue = [...this.data.name].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
+          const centerX = x + w / 2;
+          const initials = this.data.name.split(/\s+/).map(part => part[0]).join('').slice(0, 2);
+          ctx.fillStyle = `hsl(${hue} 48% 86%)`;
+          ctx.fillRect(x + 3, y + 3, dw, dh);
+          if (/Flag|Badge/.test(this.data.category)) {
+            ctx.fillStyle = `hsl(${hue} 52% 43%)`;
+            ctx.beginPath();
+            ctx.arc(centerX, y + dh * 0.48, Math.max(8, dh * 0.32), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = `800 ${Math.max(8, Math.min(14, w / 5))}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(initials, centerX, y + dh * 0.48);
+          } else {
+            const headY = y + dh * 0.42;
+            ctx.fillStyle = '#334943';
+            ctx.beginPath();
+            ctx.ellipse(centerX, y + dh * 0.94, dw * 0.31, dh * 0.34, 0, Math.PI, 0);
+            ctx.fill();
+            ctx.fillStyle = '#f1d2b1';
+            ctx.beginPath();
+            ctx.arc(centerX, headY, Math.max(6, dh * 0.2), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#263d39';
+            ctx.beginPath();
+            ctx.arc(centerX, headY - 2, Math.max(6, dh * 0.2), Math.PI, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#173b34';
+            ctx.font = `800 ${Math.max(8, Math.min(11, w / 7))}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(initials, centerX, y + h - 4);
+          }
+        }
+
+        ctx.lineWidth = 2.0;
+        ctx.strokeStyle = this.data.category.includes('Flag') || this.data.category.includes('Badge') ? '#dc2626' : '#0f766e';
+        ctx.strokeRect(x, y, w, h);
+
+        ctx.restore();
+      }
+    }
+
+    sizeCanvas();
+    const balls = Array.from({ length: Math.min(24, Math.max(10, Math.floor(cw * ch / 35000))) }, () => new Ball());
+
+    function resolveBallCollisions() {
+      if (isModalOpen || speedLevels[speedIndex].mult === 0) return;
+      for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+          const b1 = balls[i], b2 = balls[j];
+          const dx = b2.x - b1.x, dy = b2.y - b1.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist >= b1.radius + b2.radius) continue;
+          const overlap = b1.radius + b2.radius - dist;
+          const nx = dx / (dist || 1), ny = dy / (dist || 1);
+          b1.x -= nx * overlap * 0.5; b1.y -= ny * overlap * 0.5;
+          b2.x += nx * overlap * 0.5; b2.y += ny * overlap * 0.5;
+          const kx = b1.vx - b2.vx, ky = b1.vy - b2.vy;
+          const p = 2 * (nx * kx + ny * ky) / (b1.mass + b2.mass);
+          b1.vx -= p * b2.mass * nx; b1.vy -= p * b2.mass * ny;
+          b2.vx += p * b1.mass * nx; b2.vy += p * b1.mass * ny;
+        }
+      }
+    }
+
+    let lastFrame = performance.now();
+
+    function frame(now) {
+      let dt = (now - lastFrame) / 16.6667;
+      lastFrame = now;
+      dt = Math.max(0.2, Math.min(dt, 3));
+
+      ctx.clearRect(0, 0, cw, ch);
+      resolveBallCollisions();
+      balls.forEach(b => { b.update(dt); b.draw(); });
+      simulate(dt);
+      renderGraph();
+      requestAnimationFrame(frame);
+    }
+
+    measureNodes();
+    layoutInitial();
+    renderGraph();
+    requestAnimationFrame(frame);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      screenW = window.innerWidth;
+      screenH = window.innerHeight;
+      safeBottom = window.innerWidth <= 600 ? 76 : 16;
+      sizeCanvas();
+      layoutInitial();
+      renderGraph();
+      balls.forEach(b => {
+        b.x = Math.min(Math.max(b.x, b.radius), cw - b.radius);
+        b.y = Math.min(Math.max(b.y, safeTop + b.radius), ch - safeBottom - b.radius);
+      });
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(measureNodes, 120);
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (drag || isModalOpen) { hideBallTooltip(); return; }
+
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const body = el && el.closest && el.closest('.node__body');
+      if (body && body.dataset && body.dataset.nodeId) {
+        return;
+      }
+
+      let hit = null;
+      for (let i = balls.length - 1; i >= 0; i--) {
+        if (Math.hypot(balls[i].x - e.clientX, balls[i].y - e.clientY) <= balls[i].radius) {
+          hit = balls[i];
+          break;
+        }
+      }
+
+      if (hit) {
+        showBallTooltip(null, e, hit.data);
+      } else {
+        hideBallTooltip();
+      }
+    });
+
+    const speedIndicator = document.getElementById('speed-indicator');
+    function cycleSpeed() {
+      playBoing();
+      speedIndex = (speedIndex + 1) % speedLevels.length;
+      if (speedIndicator) speedIndicator.textContent = speedLevels[speedIndex].label;
+    }
+    document.getElementById('speed-toggle').addEventListener('click', cycleSpeed);
+    if (speedIndicator) {
+      speedIndicator.textContent = speedLevels[speedIndex].label;
+    }
+
+    window.addEventListener('click', e => {
+      if (isModalOpen || e.target.closest('.node') || e.target.closest('.tree-modal-card') || e.target.closest('.map-links')) return;
+
+      let clickedBall = null;
+      for (let i = balls.length - 1; i >= 0; i--) {
+        if (Math.hypot(balls[i].x - e.clientX, balls[i].y - e.clientY) <= balls[i].radius) {
+          clickedBall = balls[i];
+          break;
+        }
+      }
+
+      if (clickedBall && clickedBall.data) {
+        openModal(clickedBall.data);
+        return;
+      }
+
+      cycleSpeed();
+      balls.forEach(b => {
+        const dx = b.x - e.clientX, dy = b.y - e.clientY;
+        const dist = Math.hypot(dx, dy) || 1;
+        const force = Math.min(15, 250 / dist);
+        b.vx += (dx / dist) * force;
+        b.vy += (dy / dist) * force;
+      });
+    });
+  </script>
 </body>
 </html>
