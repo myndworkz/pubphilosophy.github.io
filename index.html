@@ -1,88 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pub/Café Philosophy</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pub Philosophy : Natural Philosophy</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #fdfbf7;
+      background-image: radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 45%),
+                        radial-gradient(circle at 20% 75%, rgba(15, 118, 110, 0.08) 0%, transparent 50%);
+    }
+    #interactive-map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .node {
+      pointer-events: auto;
+    }
+    #ball-tooltip {
+      z-index: 30;
+    }
+
+    /* Sphere & Label Styling */
+    .sphere--lg {
+      width: 220px !important;
+      height: 220px !important;
+      min-width: 220px !important;
+      min-height: 220px !important;
+      font-size: 1.35rem !important;
+      color: #000000 !important;
+    }
+    .sphere__label {
+      color: #000000 !important;
+      font-weight: 800 !important;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+    }
+    .sphere__glyph {
+      font-size: 2.8rem !important;
+      line-height: 1 !important;
+      margin-bottom: 4px !important;
+      color: #000000 !important;
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1>Welcome to Pub/Café Philosophy</h1>
-        <p><em>Slicing and dicing the world at its joints</em></p>
-    </header>
 
-    <!-- Navigation Bar -->
-    <!-- <nav class="navbar">
-        <ul>
-            <li><a href="index.html" class="nav-link">Home</a></li>
-            <li><a href="services.html" class="nav-link">Learning Plans</a></li>
-            <li><a href="contact.html" class="nav-link">Contact</a></li>
-			<li><a href="/conversations-philosopher-ai.html">Conversations Between a Philosopher and an AI</a></li>
-        </ul>
-    </nav> -->
+  <!-- Hover Tooltip -->
+  <div id="ball-tooltip" class="hidden">
+    <div id="tooltip-title" class="tooltip-title"></div>
+  </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <img src="CafePhilo.png" alt="People discussing philosophy in a cafe" class="hero-image">
-    </section>
+  <!-- Elastic Graph Mind Map Layer -->
+  <main id="interactive-map">
+    <svg id="svg-connections" class="w-full h-full absolute inset-0 pointer-events-none"></svg>
+  </main>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="text-box">
-            <h2>A Story of Ideas Over Drinks</h2>
-            <p>
-                Pub Philosophy began its journey on the vibrant streets of London’s Carnaby Street, where big ideas met casual pints in a truly unique setting. Now it continues to thrive in the creative heart of East London’s Hackney and has recently crossed borders to settle in Geneva. The format is simple yet irresistible: thought-provoking discussions, great company, and the perfect atmosphere to dive deep into the questions that shape our lives.
-            </p>
-            <p>
-                In Geneva, Café Philosophy took off with such enthusiasm that a second meeting was inevitable. Just 100 meters from the Maison Rousseau et Littérature (MRL)—where it all started—Flanagan’s Pub now hosts Pub Philosophy sessions. And so, Pub Philosophy has returned to its roots, opening a new chapter while staying true to its original mission: to make philosophy fun, accessible, and meaningful for everyone.
-            </p>
-        </div>
+  <noscript>
+    <nav style="position:fixed;bottom:1rem;left:1rem;z-index:50;font-size:0.875rem">
+      <a href="events.html">Events</a> ·
+      <a href="what-is-it.html">What It Is</a> ·
+      <a href="history-philosophy.html">History</a>
+    </nav>
+  </noscript>
 
-        <!-- Upcoming Events Section -->
-        <section class="events-section">
-            <div class="events-container">
-                <h2>Upcoming Events</h2>
-                <div class="carousel-buttons">
-                    <a href="cafe-philosophy.html" class="carousel-btn">
-                        <img src="images/SwissBtn.webp" alt="Café Philosophy Button" class="btn-image">
-                        <span>Café Philosophy</span>
-                    </a>
-                    <a href="flanagans-pub.html" class="carousel-btn">
-                        <img src="images/SwissBtn.webp" alt="Flanagan’s Pub Button" class="btn-image">
-                        <span>Pub Philosophy at Flanagan's</span>
-                    </a>
-                    <a href="hoxton-cabin.html" class="carousel-btn">
-                        <img src="images/BtnShield.webp" alt="Hoxton Cabin Button" class="btn-image">
-                        <span>Pub Philosophy at Hoxton Cabin</span>
-                    </a>
-					
-                </div>
-            </div>
-        </section>
+  <script src="audio.js"></script>
+  <script>
+    const BOOK_ICON = `<span class="sphere__glyph" aria-hidden="true">💬</span>`;
 
-        <!-- Inline Image and About the Host -->
-        <div class="image-text-inline">
-    <img src="cafephilosopher.png" alt="Dr. Bryn R. Williams leading a discussion" class="rectangle-image">
-    <div class="text-box">
-                <h2>Your Host: Dr. Bryn R. Williams</h2>
-                <p>
-                    Every great idea needs a guide, and that’s where I come in. I’m Dr. Bryn R. Williams, your pub and café philosophy host. My passion lies in creating spaces where anyone—whether a seasoned thinker or a curious newcomer—can contribute, explore, and connect through the shared joy of asking “Why?”
-                </p>
-            </div>
-        </div>
+    const GRAPH = [
+      {
+        id: 'natphil', size: 'sphere--lg', theme: 'theme-natphil', anchor: [0.50, 0.50],
+        aria: 'Natural Philosophy',
+        html: `${BOOK_ICON}<span class="sphere__label">Natural<br>Philosophy</span>`,
+        children: [
+          { id: 'natphil-events',  label: 'Events',     href: 'events.html',             chip: 'chip--amber' },
+          { id: 'natphil-what',    label: 'What It Is', href: 'what-is-it.html',         chip: 'chip--orange' },
+          { id: 'natphil-history', label: 'History',    href: 'history-philosophy.html', chip: 'chip--amberdeep' }
+        ]
+      }
+    ];
 
-        <!-- Learn More Button -->
-        <div class="button-container">
-    <a href="https://myndworkz.uk/index.html" class="btn">Learn about my teaching</a>
-</div>
+    const TOOLTIP_TEXT = {
+      natphil: "Informal, open philosophical inquiry outside academic walls—in London, Geneva, and online."
+    };
 
-    </div>
+    const ballTooltip = document.getElementById('ball-tooltip');
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2024 Pub Philosophy | Powered by Myndworkz Ltd</p>
-    </footer>
+    function showBallTooltip(id, e) {
+      const titleEl = document.getElementById('tooltip-title');
+      if (!ballTooltip || !titleEl || !TOOLTIP_TEXT[id]) return;
+
+      titleEl.textContent = TOOLTIP_TEXT[id];
+      ballTooltip.style.opacity = '1';
+      ballTooltip.classList.remove('hidden');
+
+      let x = null, y = null;
+      if (e && typeof e.clientX === 'number' && isFinite(e.clientX)) {
+        x = e.clientX;
+        y = e.clientY;
+      } else if (nodes.get(id) && nodes.get(id).body) {
+        const rect = nodes.get(id).body.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top + rect.height / 2;
+      }
+      if (x !== null && y !== null) positionBallTooltip(x, y);
+    }
+
+    function hideBallTooltip() {
+      if (!ballTooltip) return;
+      ballTooltip.classList.add('hidden');
+      ballTooltip.style.opacity = '0';
+    }
+
+    function positionBallTooltip(x, y) {
+      const pad = 12;
+      const ttW = Math.min(320, window.innerWidth - 2 * pad);
+      let left = x + 14;
+      let top = y + 14;
+      if (left + ttW > window.innerWidth - pad) left = x - ttW - 14;
+      if (top + 60 > window.innerHeight - pad) top = y - 60 - 14;
+      ballTooltip.style.left = left + 'px';
+      ballTooltip.style.top = top + 'px';
+    }
+
+    let lastHoverId = null;
+    window.addEventListener('mousemove', e => {
+      if (drag) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (!el) { if (lastHoverId) { lastHoverId = null; hideBallTooltip(); } return; }
+      const body = el.closest && el.closest('.node__body');
+      if (body && body.dataset && body.dataset.nodeId) {
+        const id = body.dataset.nodeId;
+        if (id !== lastHoverId) {
+          lastHoverId = id;
+          if (nodes.get(id) && nodes.get(id).isRoot) {
+            requestAnimationFrame(() => showBallTooltip(id, e));
+          }
+        } else {
+          positionBallTooltip(e.clientX, e.clientY);
+        }
+      } else {
+        if (lastHoverId) { lastHoverId = null; hideBallTooltip(); }
+      }
+    }, { passive: true });
+
+    const PHYS = {
+      repel: 3.2, repelPad: 45,
+      stiffChild: 0.055, gapChild: 64,
+      damping: 0.87, maxSpeed: 46,
+      anchorPull: 0.0022, restitution: 0.45, wallPad: 12
+    };
+
+    let screenW = window.innerWidth;
+    let screenH = window.innerHeight;
+    const nodes = new Map();
+    const edges = [];
+    const expanded = new Set();
+    const map = document.getElementById('interactive-map');
+    const svg = document.getElementById('svg-connections');
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    function buildNode(cfg, parentId) {
+      const wrap = document.createElement('div');
+      wrap.className = 'node' + (parentId ? ' is-collapsed' : '');
+      wrap.id = 'node-' + cfg.id;
+      const isRoot = !parentId;
+      const body = document.createElement(isRoot ? 'button' : 'a');
+
+      if (isRoot) {
+        body.type = 'button';
+        body.className = `node__body sphere ${cfg.size} ${cfg.theme}`;
+        body.setAttribute('aria-expanded', 'false');
+        body.setAttribute('aria-label', cfg.aria);
+        body.innerHTML = cfg.html;
+        body.dataset.nodeId = cfg.id;
+      } else {
+        body.href = cfg.href;
+        body.className = `node__body chip ${cfg.chip}`;
+        body.setAttribute('draggable', 'false');
+        body.textContent = cfg.label;
+        body.dataset.nodeId = cfg.id;
+      }
+
+      wrap.appendChild(body);
+      if (parentId) wrap.setAttribute('inert', '');
+      map.appendChild(wrap);
+
+      nodes.set(cfg.id, {
+        id: cfg.id, el: wrap, body,
+        x: 0, y: 0, vx: 0, vy: 0, r: isRoot ? 110 : 24,
+        active: isRoot, isRoot, parent: parentId || null,
+        invMass: isRoot ? 0.45 : 1,
+        anchor: cfg.anchor || null
+      });
+
+      attachPointer(cfg.id, body, wrap, isRoot);
+    }
+
+    GRAPH.forEach(root => {
+      buildNode(root, null);
+      root.children.forEach(child => buildNode(child, root.id));
+      edges.push(...root.children.map(c => ({ from: root.id, to: c.id, kind: 'child' })));
+    });
+
+    edges.forEach(edge => {
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('class', 'connection-line');
+      svg.appendChild(path);
+      edge.pathEl = path;
+    });
+
+    function measureNodes() {
+      nodes.forEach(n => { n.r = Math.max(22, n.body.offsetWidth / 2); });
+    }
+
+    function layoutInitial() {
+      nodes.forEach(n => {
+        if (n.isRoot) {
+          n.x = screenW * n.anchor[0];
+          n.y = screenH * n.anchor[1];
+        } else {
+          const p = nodes.get(n.parent);
+          n.x = p.x; n.y = p.y;
+        }
+        n.vx = n.vy = 0;
+      });
+    }
+
+    function toggleCluster(rootId, silent = false) {
+      const root = nodes.get(rootId);
+      const kids = GRAPH.find(g => g.id === rootId).children.map(c => nodes.get(c.id));
+      const isOpen = expanded.has(rootId);
+      root.body.setAttribute('aria-expanded', String(!isOpen));
+
+      if (isOpen) {
+        if (!silent && typeof playBoing === 'function') playBoing();
+        expanded.delete(rootId);
+        kids.forEach(k => {
+          k.active = false;
+          k.el.classList.add('is-collapsed');
+          k.el.setAttribute('inert', '');
+        });
+        return;
+      }
+
+      if (!silent && typeof playSwish === 'function') playSwish();
+      expanded.add(rootId);
+      kids.forEach((k, i) => {
+        k.active = true;
+        k.x = root.x;
+        k.y = root.y;
+        const spread = (i / kids.length) * Math.PI * 2 - Math.PI / 2;
+        k.vx = Math.cos(spread) * 24;
+        k.vy = Math.sin(spread) * 24;
+        k.el.classList.remove('is-collapsed');
+        k.el.removeAttribute('inert');
+      });
+    }
+
+    let drag = null;
+    let suppressClick = false;
+
+    function attachPointer(id, body, wrap, isRoot) {
+      body.addEventListener('dragstart', e => e.preventDefault());
+
+      body.addEventListener('pointerdown', e => {
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+        const n = nodes.get(id);
+        suppressClick = false;
+        drag = {
+          id,
+          ox: n.x - e.clientX, oy: n.y - e.clientY,
+          lastX: e.clientX, lastY: e.clientY,
+          startX: e.clientX, startY: e.clientY,
+          moved: false
+        };
+        wrap.classList.add('is-dragging');
+        try { body.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+
+      body.addEventListener('pointermove', e => {
+        if (!drag || drag.id !== id) return;
+        if (!drag.moved && Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY) > 6) {
+          drag.moved = true;
+        }
+        const n = nodes.get(id);
+        n.x = e.clientX + drag.ox;
+        n.y = e.clientY + drag.oy;
+        n.vx = e.clientX - drag.lastX;
+        n.vy = e.clientY - drag.lastY;
+        drag.lastX = e.clientX;
+        drag.lastY = e.clientY;
+      });
+
+      const endDrag = e => {
+        if (!drag || drag.id !== id) return;
+        suppressClick = drag.moved;
+        wrap.classList.remove('is-dragging');
+        try { body.releasePointerCapture(e.pointerId); } catch (_) {}
+        drag = null;
+      };
+
+      body.addEventListener('pointerup', endDrag);
+      body.addEventListener('pointercancel', endDrag);
+
+      body.addEventListener('click', e => {
+        e.stopPropagation();
+        if (suppressClick) {
+          e.preventDefault();
+          suppressClick = false;
+          return;
+        }
+        if (isRoot) {
+          e.preventDefault();
+          toggleCluster(id);
+        } else {
+          if (typeof playWoop === 'function') playWoop();
+        }
+      });
+    }
+
+    function simulate(dt) {
+      const list = [...nodes.values()].filter(n => n.active);
+
+      for (let i = 0; i < list.length; i++) {
+        for (let j = i + 1; j < list.length; j++) {
+          const a = list[i], b = list[j];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy) || 0.01;
+          const minDist = a.r + b.r + PHYS.repelPad;
+          if (dist >= minDist) continue;
+          const f = ((minDist - dist) / minDist) * PHYS.repel * dt;
+          const nx = dx / dist, ny = dy / dist;
+          if (!drag || drag.id !== a.id) { a.vx -= nx * f * a.invMass; a.vy -= ny * f * a.invMass; }
+          if (!drag || drag.id !== b.id) { b.vx += nx * f * b.invMass; b.vy += ny * f * b.invMass; }
+        }
+      }
+
+      edges.forEach(edge => {
+        const a = nodes.get(edge.from), b = nodes.get(edge.to);
+        if (!a.active || !b.active) return;
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy) || 0.01;
+        const rest = a.r + b.r + PHYS.gapChild;
+        const f = (dist - rest) * PHYS.stiffChild * dt;
+        const fx = (dx / dist) * f, fy = (dy / dist) * f;
+        if (!drag || drag.id !== a.id) { a.vx += fx * a.invMass; a.vy += fy * a.invMass; }
+        if (!drag || drag.id !== b.id) { b.vx -= fx * b.invMass; b.vy -= fy * b.invMass; }
+      });
+
+      const damp = Math.pow(PHYS.damping, dt);
+      list.forEach(n => {
+        if (drag && drag.id === n.id) return;
+        if (n.isRoot) {
+          n.vx += (screenW * n.anchor[0] - n.x) * PHYS.anchorPull * dt;
+          n.vy += (screenH * n.anchor[1] - n.y) * PHYS.anchorPull * dt;
+        }
+        n.vx *= damp;
+        n.vy *= damp;
+        const speed = Math.hypot(n.vx, n.vy);
+        if (speed > PHYS.maxSpeed) {
+          n.vx = (n.vx / speed) * PHYS.maxSpeed;
+          n.vy = (n.vy / speed) * PHYS.maxSpeed;
+        }
+        n.x += n.vx * dt;
+        n.y += n.vy * dt;
+
+        const pad = n.r + PHYS.wallPad;
+        if (n.x < pad)                { n.x = pad;                n.vx = Math.abs(n.vx) * PHYS.restitution; }
+        else if (n.x > screenW - pad) { n.x = screenW - pad;     n.vx = -Math.abs(n.vx) * PHYS.restitution; }
+        if (n.y < pad)                { n.y = pad;                n.vy = Math.abs(n.vy) * PHYS.restitution; }
+        else if (n.y > screenH - pad) { n.y = screenH - pad;     n.vy = -Math.abs(n.vy) * PHYS.restitution; }
+      });
+    }
+
+    function renderGraph() {
+      nodes.forEach(n => {
+        n.el.style.transform = `translate3d(${n.x}px, ${n.y}px, 0)`;
+      });
+
+      edges.forEach(edge => {
+        const a = nodes.get(edge.from);
+        const b = nodes.get(edge.to);
+        if (!a || !b || !a.active || !b.active) {
+          edge.pathEl.style.display = 'none';
+          return;
+        }
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const nx = dx / dist;
+        const ny = dy / dist;
+
+        const startX = a.x + nx * Math.min(a.r - 2, dist * 0.4);
+        const startY = a.y + ny * Math.min(a.r - 2, dist * 0.4);
+        const endX   = b.x - nx * Math.min(b.r - 2, dist * 0.4);
+        const endY   = b.y - ny * Math.min(b.r - 2, dist * 0.4);
+
+        edge.pathEl.style.display = 'block';
+        edge.pathEl.setAttribute('d', `M ${startX} ${startY} L ${endX} ${endY}`);
+      });
+    }
+
+    let lastFrame = performance.now();
+    function frame(now) {
+      let dt = (now - lastFrame) / 16.6667;
+      lastFrame = now;
+      dt = Math.max(0.2, Math.min(dt, 3));
+      simulate(dt);
+      renderGraph();
+      requestAnimationFrame(frame);
+    }
+
+    measureNodes();
+    layoutInitial();
+    renderGraph();
+    requestAnimationFrame(frame);
+
+    // Auto-expand the Natural Philosophy children on load so visitors immediately see the links
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!expanded.has('natphil')) toggleCluster('natphil', true);
+      }, 350);
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      screenW = window.innerWidth;
+      screenH = window.innerHeight;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(measureNodes, 120);
+    });
+  </script>
 </body>
 </html>
