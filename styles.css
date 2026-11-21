@@ -1,60 +1,270 @@
-/* General Body Styles */
-body {
-    font-family: Arial, sans-serif;
+/* Reset default browser styling */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
     line-height: 1.6;
 }
 
-/* Global Padding */
-.container, header, .navbar, footer, .events-section, .splash, .about-section {
-    padding: 0 1in; /* Ensures text is brought in from edges */
-    box-sizing: border-box; /* Ensures padding does not affect width */
-}
-/* .container {
-    padding: 0 1in;
-    max-width: 800px;
-    margin: 0 auto;
-}
- */
-.text-box {
-    text-align: left;
-    margin-bottom: 2em;
+/* General Reset */
+body, h1, h2, h3, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.text-box h2 {
-    color: #d62828;
-    font-size: 1.8rem;
-    margin-bottom: 0.5em;
+/* Dropdown Button Styled Like Navigation Links */
+.dropbtn {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background: #555;
+    color: white !important;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.splash {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+}
+
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.splash-content h1,
+.splash-content h2 {
+    text-align: center;
+    margin: 0;
+}
+
+.splash-content .image-box {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.splash-content .image-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.splash-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 800px;
+}
+
+.splash-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-box {
+    flex: 1 1 45%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.text-box {
+    flex: 1 1 45%;
+    max-width: 600px;
+    text-align: left;
 }
 
 .text-box p {
     font-size: 1rem;
-    line-height: 1.8;
+    line-height: 1.6;
+    font-weight: bold;
+    color: inherit;
+    margin: 1rem 0;
 }
 
-/* Header */
-header {
-    text-align: center;
-    background-color: #d62828;
+.button-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    margin: 0.5em;
+    padding: 0.75em 1.5em;
+    background: #d62828;
     color: white;
-    padding: 1.5em 0;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
+.btn:hover {
+    background: #e60023;
+    transform: scale(1.05);
 }
 
-header p {
-    margin: 0;
-    font-size: 1.2rem;
-    font-style: italic;
+.carousel {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #000;
+    border: 2px solid #fff;
+    border-radius: 5px;
 }
 
-/* Navigation Bar */
+.carousel-images img {
+    display: none;
+    width: 100%;
+    height: auto;
+}
+
+.carousel-images img.active {
+    display: block;
+}
+
+button.prev,
+button.next {
+    position: absolute;
+    top: 50%;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+}
+
+button.prev { left: 0; }
+button.next { right: 0; }
+
+button:hover {
+    background-color: red;
+    color: white;
+}
+
+/* About Section */
+.about-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.illustration {
+    flex: 1;
+    text-align: right;
+}
+
+/* Events Section */
+.carousel-buttons {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.btn-image {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+    font-size: 0.875rem;
+}
+
+/* Hover State for Dropdown Button */
+.dropbtn:hover {
+    background: #777;
+    color: white;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 160px;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 15px;
+    color: black;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background: #0073e6;
+    color: white;
+}
+
+/* Show Dropdown on Hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Centralized Image Container */
+.main-image {
+    display: block;
+    margin: 20px auto;
+    width: 600px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Download Buttons */
+.downloads-section a {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #0073e6;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.downloads-section a:hover {
+    background-color: #005bb5;
+}
+
+/* Responsive Navigation Bar */
 .navbar {
     background-color: #333;
     padding: 0.5em 0;
@@ -84,168 +294,563 @@ header p {
     color: #444;
 }
 
-.hero {
-    width: 100%;
+/* Responsive Splash Section */
+.splash {
     text-align: center;
-    margin-bottom: 2em;
+    padding: 2em;
+    background: #f4f4f4;
 }
 
-.hero-image {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.oval-image {
-    width: 120px; /* Adjusted for smaller width */
-    height: 160px; /* Height for a passport ratio */
-    border-radius: 50%; /* Oval effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    object-fit: cover;
-}
-
-.image-container {
-    display: flex;
-    justify-content: center;
-    margin: 2em 0;
-}
-
-.inset-image {
-    max-width: 200px;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Splash Buttons Centered */
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 1.5em;
-    margin-bottom: 2em;
-}
-
-.button-container a {
+.splash .btn {
     display: inline-block;
     padding: 0.8em 1.5em;
-    background-color: #d62828;
-    color: white;
+    background-color: white;
+    color: red;
     text-decoration: none;
+    border: 2px solid black;
     border-radius: 5px;
     font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.splash .btn:hover {
+    background-color: red;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Responsive Content Section */
+.about-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    background: #fff;
+}
+
+.about-section .image-box {
+    flex: 1 1 45%;
+    text-align: center;
+}
+
+.about-section .text-box {
+    padding: 1em;
+}
+
+.about-section .image-box img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Responsive Footer */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+    color: black;
+    z-index: 1000;
+}
+
+/* Media Queries for Smaller Screens */
+@media (max-width: 768px) {
+    .splash .btn {
+        padding: 0.5em 1em;
+        font-size: 0.9em;
+    }
+
+    .about-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-section .text-box, 
+    .about-section .image-box {
+        flex: 1 1 100%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Logo Styling */
+.logo {
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+.myndworkz-title {
+    color: red;
+    text-align: center;
+}
+
+.report-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-top: 62.25%;
+}
+
+.report-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Contact Section Styling */
+.contact-section {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1rem;
+    text-align: center;
+}
+
+.contact-section h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.contact-section p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+.contact-section a {
+    color: #ff414d;
+    text-decoration: none;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+}
+
+/* Contact Form Styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    max-width: 600px;
+    margin: 2em auto;
+    text-align: left;
+}
+
+.contact-form label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.contact-form textarea {
+    height: 120px;
+}
+
+.contact-form button {
+    background-color: #d62828;
+    color: white;
+    border: none;
+    padding: 0.8em 1.5em;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.button-container a:hover {
-    background-color: #b22222;
+.contact-form button:hover {
+    background-color: #a00000;
 }
 
-/* Events Section */
-.events-container {
-    background-color: #000;
-    padding: 2em;
+/* About Page Styling */
+.about-section {
+    max-width: 1000px;
+    margin: 2rem auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.about-content .text-box {
+    flex: 1;
+}
+
+.about-content .image-box {
+    flex: 1;
     text-align: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    height: auto;
     border-radius: 10px;
-    color: #fff;
-    max-width: 600px;
-    margin: 2em auto; /* Centers the container */
 }
 
-.events-container h2 {
-    color: #fff;
-    margin-bottom: 1em;
+/* Services Section Styling */
+.services-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
-/* Carousel Buttons */
-.carousel-buttons {
+.text-box {
+    flex: 1 1 60%;
+    min-width: 300px;
+}
+
+.image-box {
+    flex: 1 1 40%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.services-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.text-box h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.text-box h2 {
+    font-size: 1.5rem;
+    color: #ff414d;
+    margin-bottom: 0.5rem;
+}
+
+.text-box p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.services-section {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    text-align: center;
+}
+
+.services-section h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.services-section p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.service-box {
+    text-align: left;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.service-box h2 {
+    font-size: 1.5rem;
+    color: #ff414d;
+    margin-bottom: 0.5rem;
+}
+
+.service-box p {
+    color: #333;
+}
+
+/* Credentials Section Styling */
+.credentials-section {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: #f4f4f4;
+    max-width: 700px;
+    margin: 2rem auto;
+}
+
+.credentials-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.credentials-section ul li {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+/* CV Download Button */
+.cv-download {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.cv-download .btn {
+    padding: 0.75rem 2rem;
+    background: #ff414d;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.cv-download .btn:hover {
+    background: #e60023;
+}
+
+/* Navigation Bar */
+header {
+    background: #333;
+    padding: 1rem 0;
+}
+
+nav ul {
     display: flex;
     justify-content: center;
-    gap: 1em;
+    list-style: none;
 }
 
-.carousel-btn {
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border: 2px solid #333;
+    color: #333;
+    background-color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 0.8em 1.5em;
+    background-color: white;
+    color: red;
+    text-decoration: none;
+    border: 3px solid black;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0.5em 0;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: red;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Show Dropdown on Hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Lesson Cards */
+.lesson-card {
+    text-align: left;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.lesson-card img {
+    width: 100%;
+    border-radius: 8px;
+    height: auto;
+}
+
+/* Placeholder Image */
+.placeholder-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: #ddd;
+}
+
+#speech-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#speech-text {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 10px;
+}
+
+/* Card Styles */
+.card {
+    width: 200px;
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-decoration: none;
-    padding: 0.5em;
-    border-radius: 5px;
-    background-color: #333;
-    color: white;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-    width: 120px; /* Ensures button consistency */
+    justify-content: center;
+    background-color: #f9f9f9;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.carousel-btn:hover {
-    transform: scale(1.1);
-    background-color: #444;
+.card img {
+    max-width: 100%;
+    max-height: 60%;
+    object-fit: contain;
+    margin-bottom: 10px;
 }
 
-.btn-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 0.5em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.carousel-btn span {
-    font-size: 0.9em;
-    color: white;
-    margin-top: 0.3em;
-}
-
-/* Image Container */
-.image-container {
-    max-width: 600px;
-    margin: 2em auto;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centers the image within its container */
-}
-
-.image-container img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-.image-text-inline {
-    display: flex;
-    align-items: center;
-    gap: 1.5em;
-    margin: 2em 0;
-}
-
-.rectangle-image {
-    width: 240px; /* Twice the width of a passport photo */
-    height: 320px; /* Adjusted for proportion */
-    border-radius: 10px; /* Subtle rounding for aesthetics */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    object-fit: cover; /* Ensures the image is scaled proportionally */
-}
-
-/* Footer */
-footer {
+.card p {
+    font-size: 14px;
     text-align: center;
-    background-color: #333;
-    color: white;
-    padding: 1em 0;
+    color: #333;
+    margin: 0;
+    word-wrap: break-word;
 }
 
-/* Responsive Design */
+/* Main Content Section */
+.about-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: #f4f4f4;
+}
+
+.about-content {
+    display: flex;
+    max-width: 1000px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.text-box {
+    flex: 1;
+}
+
+.text-box h2 {
+    font-size: 1.75rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.text-box p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.link {
+    font-weight: bold;
+    color: #ff414d;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.image-box {
+    flex: 1;
+}
+
+.image-box img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Responsive Styling */
 @media (max-width: 768px) {
-    .navbar ul {
+    .about-content {
         flex-direction: column;
-        gap: 0.5em;
+        text-align: center;
     }
 
-    .container, header, .navbar, footer, .events-container {
-        padding: 0 1em; /* Reduced padding for smaller screens */
+    .splash h1 {
+        font-size: 1.5rem;
     }
 
-    .events-container {
-        max-width: 90%; /* Adjust width for smaller screens */
+    .splash p {
+        font-size: 1rem;
     }
+}
+.bubble-emerald-3d {
+    color: #000000 !important;
 }

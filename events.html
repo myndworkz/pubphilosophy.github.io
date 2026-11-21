@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book a seat at Pub Philosophy and Café Philosophy sessions in London (Hoxton Cabin) and Geneva (MRL & Flanagan's). Free to attend. Open to all.">
+  <meta name="author" content="Bryn & Elle, myndworkz">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://myndworkz.uk/events.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="myndworkz.uk">
+  <meta property="og:title" content="Events & Bookings – Natural Philosophy | myndworkz.uk">
+  <meta property="og:description" content="Book a seat at Pub Philosophy and Café Philosophy sessions in London (Hoxton Cabin) and Geneva (MRL & Flanagan's). Free to attend. Open to all.">
+  <meta property="og:url" content="https://myndworkz.uk/events.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Events & Bookings – Natural Philosophy | myndworkz.uk">
+  <meta name="twitter:description" content="Book a seat at Pub Philosophy and Café Philosophy sessions in London (Hoxton Cabin) and Geneva (MRL & Flanagan's). Free to attend. Open to all.">
+  <title>Events & Bookings : Natural Philosophy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #fdfbf7;
+      background-image: radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 15% 70%, rgba(15, 118, 110, 0.08) 0%, transparent 50%);
+    }
+    .bubble-amber-3d {
+      background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.5) 45%, rgba(217, 119, 6, 0.8) 85%, rgba(120, 53, 15, 0.95) 100%);
+      box-shadow: 0 15px 35px -5px rgba(217, 119, 6, 0.35), 
+                  inset 0 -5px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    .bubble-amber-3d::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 35%;
+      height: 20%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 50%;
+      transform: rotate(-35deg);
+      pointer-events: none;
+    }
+
+    [class*="bubble-"][class*="-3d"],
+    [class*="bubble-"][class*="-3d"] * {
+      color: #000 !important;
+    }
+  </style>
+</head>
+<body class="font-sans text-stone-900 antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8 select-none">
+
+  <!-- Top Navigation Bar -->
+  <div class="max-w-6xl mx-auto mb-10 flex justify-between items-center">
+    <a href="index.html" class="inline-flex items-center text-sm font-semibold text-amber-900 bg-amber-100/90 hover:bg-amber-200/90 px-4 py-2 rounded-full border border-amber-300 transition-all shadow-sm hover:shadow-md">
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Back to Map
+    </a>
+    <div class="text-xs font-bold uppercase tracking-widest text-amber-800 bg-amber-50 px-3.5 py-1.5 rounded-full border border-amber-200 shadow-sm">
+      Natural Philosophy • Events &amp; Bookings
+    </div>
+  </div>
+
+  <!-- Main Grid Layout -->
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
+    
+    <!-- LEFT COLUMN -->
+    <div class="md:col-span-5 lg:col-span-4 space-y-10 flex flex-col items-center md:items-stretch">
+      
+      <!-- 3D Bubble Frame -->
+      <div class="flex flex-col items-center">
+        <div class="w-64 h-64 sm:w-72 sm:h-72 rounded-full bubble-amber-3d flex flex-col items-center justify-center text-center p-6 border border-amber-600/30">
+          <svg class="w-12 h-12 text-amber-100 drop-shadow mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <span class="text-xs font-black uppercase tracking-widest text-amber-50 drop-shadow">Events Log</span>
+          <span class="text-[10px] font-bold text-amber-200/90 mt-1">London &amp; Geneva</span>
+        </div>
+      </div>
+
+      <!-- Left Sidebar Accordion: Direct Booking Links -->
+      <div class="w-full max-w-sm bg-white/95 border-2 border-amber-500/20 rounded-2xl shadow-xl p-6 relative">
+        <div class="absolute -top-3 -right-3 w-8 h-8 bg-amber-200 rounded-full border border-amber-400 flex items-center justify-center transform rotate-12 font-black text-xs text-amber-800 shadow">
+          📅
+        </div>
+        
+        <h3 class="text-lg font-black text-stone-800 border-b-2 border-dashed border-stone-200 pb-3 mb-4 flex items-center">
+          <span class="inline-block w-3 h-3 rounded-full bg-amber-600 mr-2 shadow-sm"></span>
+          Booking Portals
+        </h3>
+        
+        <div class="space-y-3">
+          <!-- Accordion 1: London -->
+          <button onclick="toggleSection('london')" class="w-full text-left p-3 rounded-xl border border-stone-200 hover:border-amber-400 bg-stone-50/50 hover:bg-amber-50/50 transition-all flex items-center justify-between group focus:outline-none">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-sm">🇬🇧</div>
+              <div>
+                <h4 class="font-bold text-stone-800 text-sm">London Bookings</h4>
+                <p class="text-[10px] text-stone-500">Hoxton Cabin</p>
+              </div>
+            </div>
+            <svg id="chevron-london" class="w-4 h-4 text-stone-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div id="section-london" class="hidden px-3 pb-3 pt-2 text-xs text-stone-600 space-y-2 leading-relaxed">
+            <p>Direct RSVP links for Hoxton Cabin sessions:</p>
+            <!-- <a href="https://www.eventbrite.co.uk/e/pub-philosophy-tickets-1980267537512" target="_blank" rel="noopener noreferrer" class="block font-bold text-amber-800 hover:underline">→ Hoxton Cabin on Eventbrite</a> -->
+            <a href="https://www.hoxtoncabin.com/pubphilosophy" target="_blank" rel="noopener noreferrer" class="block font-bold text-amber-800 hover:underline">→ Hoxton Cabin Official Events</a>
+          </div>
+
+          <!-- Accordion 2: Geneva -->
+          <button onclick="toggleSection('geneva')" class="w-full text-left p-3 rounded-xl border border-stone-200 hover:border-amber-400 bg-stone-50/50 hover:bg-amber-50/50 transition-all flex items-center justify-between group focus:outline-none">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-sm">🇨🇭</div>
+              <div>
+                <h4 class="font-bold text-stone-800 text-sm">Geneva Bookings</h4>
+                <p class="text-[10px] text-stone-500">Meetup Group</p>
+              </div>
+            </div>
+            <svg id="chevron-geneva" class="w-4 h-4 text-stone-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div id="section-geneva" class="hidden px-3 pb-3 pt-2 text-xs text-stone-600 space-y-2 leading-relaxed">
+            <p>MRL &amp; Flanagan's sessions are scheduled via Meetup:</p>
+            <a href="https://www.meetup.com/geneve-philosophy-cafe-in-english/" target="_blank" rel="noopener noreferrer" class="block font-bold text-teal-800 hover:underline">→ Geneva Philosophy Café on Meetup</a>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-stone-500 italic mt-4 pt-3 border-t border-stone-100">
+          Note: All sessions are completely free to attend.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN (CONTENT) -->
+    <div class="md:col-span-7 lg:col-span-8 bg-white border border-stone-200 rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 space-y-8">
+      
+      <div class="border-b border-stone-100 pb-6">
+        <span class="text-amber-800 font-extrabold uppercase tracking-widest text-xs">Join Us • Book A Spot</span>
+        <h1 class="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight mt-1">
+          Events &amp; Bookings
+        </h1>
+        <p class="text-stone-500 text-sm font-medium mt-1">Choose a Date, Save your Seat, and Join the conversation</p>
+      </div>
+
+      <div class="prose prose-stone max-w-none text-stone-700 leading-relaxed space-y-6 text-sm sm:text-base">
+        <div>
+          <h2 class="text-xl font-bold text-stone-900 mb-2">Our London Home: The Hoxton Cabin</h2>
+          <p>
+            In London, we meet downstairs in the intimate basement event space of the Hoxton Cabin on Kingsland Road, Hackney. This creative community resource is a great place to immerse yourself in a discussion that interrogates assumptions and challenges orthodoxies.
+          </p>
+          <p class="mt-3">
+            Hoxton Cabin attracts a wide range of people across age, gender, ethnicity and nationality. Free popcorn is available at the bar and dogs are warmly welcomed — both to the cabin and to our discussions.
+          </p>
+        </div>
+
+        <div class="p-6 bg-stone-50 border border-stone-200 rounded-xl space-y-3">
+          <h3 class="text-lg font-bold text-stone-900">Our Geneva Venues: MRL &amp; Flanagan's</h3>
+          <p class="text-xs sm:text-sm">
+            In Geneva, we hold Saturday morning sessions at the <strong>Maison Rousseau et Littérature (MRL)</strong> and Wednesday evening pub sessions at <strong>Flanagan's / Café de la Place</strong>. Both gatherings are organized in English through the Geneva Philosophy Café network.
+          </p>
+        </div>
+
+        <div class="p-5 bg-teal-50/70 border-l-4 border-teal-600 rounded-r-xl space-y-2">
+          <h4 class="font-black text-stone-800 text-sm uppercase tracking-wider">How to Participate</h4>
+          <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">
+            Reserve your place through the sidebar portals or simply turn up on the night. Arrive 15 minutes early to grab a drink and settle in before topic voting begins!
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="audio.js"></script>
+  <script>
+    function toggleSection(id) {
+      playSwish();
+      const sec = document.getElementById('section-' + id);
+      const chevron = document.getElementById('chevron-' + id);
+      if (!sec) return;
+      if (sec.classList.contains('hidden')) {
+        sec.classList.remove('hidden');
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      } else {
+        sec.classList.add('hidden');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+  </script>
+</body>
+</html>
