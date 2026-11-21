@@ -4,18 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pub Philosophy : Natural Philosophy</title>
-  <link rel="stylesheet" href="style.css">
   <style>
-    body, html {
+    *, *::before, *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    body, html {
       width: 100%;
       height: 100%;
       overflow: hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #fdfbf7;
-      background-image: radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 45%),
-                        radial-gradient(circle at 20% 75%, rgba(15, 118, 110, 0.08) 0%, transparent 50%);
+      background-image:
+        radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 20% 75%, rgba(15, 118, 110, 0.08) 0%, transparent 50%);
+      user-select: none;
+      -webkit-user-select: none;
     }
+
     #interactive-map {
       position: absolute;
       inset: 0;
@@ -24,32 +32,172 @@
       z-index: 10;
       pointer-events: none;
     }
-    .node {
-      pointer-events: auto;
-    }
-    #ball-tooltip {
-      z-index: 30;
+
+    #svg-connections {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
-    /* Sphere & Label Styling */
+    .connection-line {
+      stroke: #94a3b8;
+      stroke-width: 2.5px;
+      stroke-dasharray: 5 5;
+      fill: none;
+      opacity: 0.75;
+    }
+
+    /* Node Wrapper & Positioning */
+    .node {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: auto;
+      will-change: transform;
+      transition: opacity 0.25s ease;
+    }
+
+    .node.is-collapsed {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .node.is-dragging {
+      z-index: 50;
+      cursor: grabbing;
+    }
+
+    /* Main 3D Sphere */
+    .sphere {
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 3px solid #d97706;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+
+    .sphere:hover {
+      transform: translate(-50%, -50%) scale(1.04);
+    }
+
+    .sphere:active {
+      transform: translate(-50%, -50%) scale(0.97);
+    }
+
     .sphere--lg {
-      width: 220px !important;
-      height: 220px !important;
-      min-width: 220px !important;
-      min-height: 220px !important;
-      font-size: 1.35rem !important;
-      color: #000000 !important;
+      width: 220px;
+      height: 220px;
+      font-size: 1.35rem;
+      color: #000000;
     }
-    .sphere__label {
-      color: #000000 !important;
-      font-weight: 800 !important;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+
+    /* Amber 3D Glossy Sphere Theme */
+    .theme-natphil {
+      background: radial-gradient(circle at 35% 30%, #ffffff 0%, #fef08a 32%, #fcd34d 72%, #d97706 100%);
+      box-shadow:
+        0 20px 40px -10px rgba(217, 119, 6, 0.4),
+        inset 0 -8px 18px rgba(146, 64, 14, 0.35);
     }
+
+    .theme-natphil::after {
+      content: '';
+      position: absolute;
+      top: 12%;
+      left: 16%;
+      width: 34%;
+      height: 18%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 50%;
+      transform: rotate(-32deg);
+      pointer-events: none;
+    }
+
     .sphere__glyph {
-      font-size: 2.8rem !important;
-      line-height: 1 !important;
-      margin-bottom: 4px !important;
-      color: #000000 !important;
+      font-size: 2.8rem;
+      line-height: 1;
+      margin-bottom: 6px;
+      color: #000000;
+    }
+
+    .sphere__label {
+      color: #000000;
+      font-weight: 800;
+      line-height: 1.15;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Sub-Bubble Chips */
+    .chip {
+      transform: translate(-50%, -50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1.35rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+      border-width: 2.5px;
+      border-style: solid;
+      box-shadow:
+        0 10px 22px -5px rgba(0, 0, 0, 0.14),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    }
+
+    .chip:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow: 0 14px 26px -4px rgba(0, 0, 0, 0.2);
+    }
+
+    .chip--amber {
+      background: radial-gradient(circle at 30% 25%, #ffffff 0%, #fef08a 45%, #fde047 100%);
+      border-color: #ca8a04;
+      color: #713f12;
+    }
+
+    .chip--orange {
+      background: radial-gradient(circle at 30% 25%, #ffffff 0%, #fed7aa 45%, #fdba74 100%);
+      border-color: #ea580c;
+      color: #7c2d12;
+    }
+
+    .chip--amberdeep {
+      background: radial-gradient(circle at 30% 25%, #ffffff 0%, #fde68a 45%, #fbbf24 100%);
+      border-color: #b45309;
+      color: #78350f;
+    }
+
+    /* Tooltip */
+    #ball-tooltip {
+      position: fixed;
+      z-index: 30;
+      max-width: 280px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1.5px solid #f59e0b;
+      border-radius: 12px;
+      padding: 0.65rem 0.9rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: #292524;
+      font-weight: 600;
+      transition: opacity 0.15s ease;
+    }
+
+    #ball-tooltip.hidden {
+      display: none;
     }
   </style>
 </head>
@@ -57,12 +205,12 @@
 
   <!-- Hover Tooltip -->
   <div id="ball-tooltip" class="hidden">
-    <div id="tooltip-title" class="tooltip-title"></div>
+    <div id="tooltip-title"></div>
   </div>
 
   <!-- Elastic Graph Mind Map Layer -->
   <main id="interactive-map">
-    <svg id="svg-connections" class="w-full h-full absolute inset-0 pointer-events-none"></svg>
+    <svg id="svg-connections"></svg>
   </main>
 
   <noscript>
@@ -124,7 +272,7 @@
 
     function positionBallTooltip(x, y) {
       const pad = 12;
-      const ttW = Math.min(320, window.innerWidth - 2 * pad);
+      const ttW = Math.min(280, window.innerWidth - 2 * pad);
       let left = x + 14;
       let top = y + 14;
       if (left + ttW > window.innerWidth - pad) left = x - ttW - 14;
@@ -198,7 +346,7 @@
 
       nodes.set(cfg.id, {
         id: cfg.id, el: wrap, body,
-        x: 0, y: 0, vx: 0, vy: 0, r: isRoot ? 110 : 24,
+        x: 0, y: 0, vx: 0, vy: 0, r: isRoot ? 110 : 32,
         active: isRoot, isRoot, parent: parentId || null,
         invMass: isRoot ? 0.45 : 1,
         anchor: cfg.anchor || null
@@ -221,7 +369,7 @@
     });
 
     function measureNodes() {
-      nodes.forEach(n => { n.r = Math.max(22, n.body.offsetWidth / 2); });
+      nodes.forEach(n => { n.r = Math.max(26, n.body.offsetWidth / 2); });
     }
 
     function layoutInitial() {
@@ -261,8 +409,8 @@
         k.x = root.x;
         k.y = root.y;
         const spread = (i / kids.length) * Math.PI * 2 - Math.PI / 2;
-        k.vx = Math.cos(spread) * 24;
-        k.vy = Math.sin(spread) * 24;
+        k.vx = Math.cos(spread) * 26;
+        k.vy = Math.sin(spread) * 26;
         k.el.classList.remove('is-collapsed');
         k.el.removeAttribute('inert');
       });
@@ -427,7 +575,7 @@
     renderGraph();
     requestAnimationFrame(frame);
 
-    // Auto-expand the Natural Philosophy children on load so visitors immediately see the links
+    // Auto-expand the Natural Philosophy children on load
     window.addEventListener('load', () => {
       setTimeout(() => {
         if (!expanded.has('natphil')) toggleCluster('natphil', true);
