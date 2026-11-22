@@ -860,6 +860,15 @@
         detailUrl: "https://en.wikipedia.org/wiki/David_Hume"
       },
       {
+        name: "Mary Wollstonecraft",
+        subtitle: "1759 – 1797 • Enlightenment & Feminist Philosophy",
+        category: "Philosopher",
+        imgUrl: "https://en.wikipedia.org/wiki/Special:Redirect/file/Mary_Wollstonecraft_by_John_Opie_(c._1797).jpg?width=200",
+        largeImg: "https://en.wikipedia.org/wiki/Special:Redirect/file/Mary_Wollstonecraft_by_John_Opie_(c._1797).jpg?width=480",
+        description: "Author of 'A Vindication of the Rights of Woman', arguing that women and men are equally rational beings entitled to education and civic freedom.",
+        detailUrl: "https://en.wikipedia.org/wiki/Mary_Wollstonecraft"
+      },
+      {
         name: "Friedrich Nietzsche",
         subtitle: "1844 – 1900 • Existentialism & Genealogy",
         category: "Philosopher",
@@ -885,6 +894,33 @@
         largeImg: "https://en.wikipedia.org/wiki/Special:Redirect/file/Sartre_1967_crop.jpg?width=480",
         description: "Café-dwelling existentialist who famously held that 'existence precedes essence' and that human beings are condemned to be free.",
         detailUrl: "https://en.wikipedia.org/wiki/Jean-Paul_Sartre"
+      },
+      {
+        name: "Hannah Arendt",
+        subtitle: "1906 – 1975 • Political Philosophy",
+        category: "Philosopher",
+        imgUrl: "https://en.wikipedia.org/wiki/Special:Redirect/file/Hannah_Arendt_1933.jpg?width=200",
+        largeImg: "https://en.wikipedia.org/wiki/Special:Redirect/file/Hannah_Arendt_1933.jpg?width=480",
+        description: "Political theorist of totalitarianism, the public sphere, and 'the banality of evil', championing active civic thinking and judgment.",
+        detailUrl: "https://en.wikipedia.org/wiki/Hannah_Arendt"
+      },
+      {
+        name: "Simone de Beauvoir",
+        subtitle: "1908 – 1986 • Existentialist Ethics & Feminism",
+        category: "Philosopher",
+        imgUrl: "https://en.wikipedia.org/wiki/Special:Redirect/file/Simone_de_Beauvoir2.png?width=200",
+        largeImg: "https://en.wikipedia.org/wiki/Special:Redirect/file/Simone_de_Beauvoir2.png?width=480",
+        description: "Existentialist philosopher and author of 'The Second Sex', examining lived freedom, ambiguity, and how 'one is not born, but rather becomes, a woman.'",
+        detailUrl: "https://en.wikipedia.org/wiki/Simone_de_Beauvoir"
+      },
+      {
+        name: "Elizabeth Anscombe",
+        subtitle: "1919 – 2001 • Action Theory & Virtue Ethics",
+        category: "Philosopher",
+        imgUrl: "https://en.wikipedia.org/wiki/Special:Redirect/file/G.E.M._Anscombe.jpg?width=200",
+        largeImg: "https://en.wikipedia.org/wiki/Special:Redirect/file/G.E.M._Anscombe.jpg?width=480",
+        description: "Analytic philosopher who revived modern virtue ethics and transformed the philosophy of action with her landmark work 'Intention'.",
+        detailUrl: "https://en.wikipedia.org/wiki/G._E._M._Anscombe"
       },
       {
         name: "Peter Singer",
@@ -1023,8 +1059,8 @@
 
     sizeCanvas();
 
-    // Seed 20 floating philosopher portrait cards (2 of each of the 10 thinkers)
-    const cards = Array.from({ length: 20 }, (_, idx) => new IdeaCard(philosophersDb[idx % philosophersDb.length]));
+    // Seed 28 floating philosopher portrait cards (2 of each of the 14 thinkers)
+    const cards = Array.from({ length: 28 }, (_, idx) => new IdeaCard(philosophersDb[idx % philosophersDb.length]));
 
     function resolveCardCollisions() {
       if (isModalOpen || speedLevels[speedIndex].mult === 0) return;
